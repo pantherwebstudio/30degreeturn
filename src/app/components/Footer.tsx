@@ -9,15 +9,22 @@ export default function Footer() {
         .sb-footer {
           background-color: var(--primary-dark);
           color: var(--text-white);
-          padding: 4rem 8% 2rem 8%;
+          padding: 3.5rem 6% 2rem 6%;
           font-size: 0.85rem;
         }
 
         .sb-footer-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          grid-template-columns: 1fr 1fr;
           gap: 3rem;
-          margin-bottom: 3rem;
+          margin-bottom: 2.5rem;
+        }
+
+        @media (max-width: 768px) {
+          .sb-footer-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
         }
 
         .sb-footer-col {
@@ -27,146 +34,97 @@ export default function Footer() {
         }
 
         .sb-footer-title {
-          font-size: 0.95rem;
+          font-family: var(--font-serif);
+          font-size: 1.25rem;
           font-weight: 700;
           color: var(--text-white);
-          letter-spacing: 0.5px;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.25rem;
         }
 
-        .sb-footer-links {
-          display: flex;
-          flex-direction: column;
-          gap: 0.85rem;
-          list-style: none;
-        }
-
-        .sb-footer-link {
+        .sb-footer-desc {
           color: var(--bg-creamy);
-          font-weight: 500;
-          transition: all 0.25s ease;
-          position: relative;
-          padding-left: 0;
+          opacity: 0.9;
+          line-height: 1.5;
+          max-width: 440px;
         }
 
-        .sb-footer-link:hover {
-          color: white;
-          padding-left: 6px;
-        }
-
-        .sb-footer-socials {
-          display: flex;
-          gap: 1.25rem;
-          margin-top: 0.5rem;
-        }
-
-        .social-icon-circle {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: 1px solid #A0B2A6;
-          display: flex;
+        .insta-btn {
+          display: inline-flex;
           align-items: center;
-          justify-content: center;
-          color: #A0B2A6;
-          font-size: 0.9rem;
-          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .social-icon-circle:hover {
-          background-color: white;
-          border-color: white;
-          color: var(--primary-dark);
-          transform: translateY(-3px);
-          box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
-        }
-
-        .app-badges {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
+          gap: 0.6rem;
+          background: rgba(242, 235, 223, 0.12);
+          border: 1px solid rgba(242, 235, 223, 0.25);
+          color: var(--text-white);
+          padding: 0.65rem 1.25rem;
+          border-radius: var(--radius-full);
+          font-weight: 600;
+          font-size: 0.85rem;
+          transition: all 0.3s ease;
+          width: fit-content;
+          text-decoration: none;
           margin-top: 0.5rem;
+        }
+
+        .insta-btn:hover {
+          background: #E1306C;
+          border-color: #E1306C;
+          color: white;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 18px rgba(225, 48, 108, 0.35);
         }
 
         .sb-footer-bottom {
-          border-top: 1px solid #3B5B47;
+          border-top: 1px solid rgba(242, 235, 223, 0.15);
           padding-top: 1.5rem;
           display: flex;
           justify-content: space-between;
           align-items: center;
           flex-wrap: wrap;
           gap: 1rem;
-          color: #A0B2A6;
-          font-size: 0.75rem;
-        }
-
-        .sb-footer-bottom-links {
-          display: flex;
-          gap: 1.5rem;
-        }
-
-        .sb-footer-bottom-link:hover {
-          color: white;
-          text-decoration: underline;
-          text-underline-offset: 3px;
+          color: var(--bg-creamy);
+          opacity: 0.85;
+          font-size: 0.8rem;
         }
       `}</style>
 
       <footer className="sb-footer">
         <div className="sb-footer-grid">
           <div className="sb-footer-col">
-            <h4 className="sb-footer-title">About Us</h4>
-            <ul className="sb-footer-links">
-              <li><a href="#" className="sb-footer-link">Our Heritage</a></li>
-              <li><a href="#" className="sb-footer-link">Coffeehouse Details</a></li>
-              <li><a href="#" className="sb-footer-link">Our Company</a></li>
-            </ul>
+            <h4 className="sb-footer-title">30° Turn Cafe</h4>
+            <p className="sb-footer-desc">
+              Carefully crafted. Perfectly poured. Experience hand-brewed specialty coffees, artisanal matchas, and fresh warm bakes everyday.
+            </p>
+            <a
+              href="https://www.instagram.com/30degreeturn?igsi=OTZyMWV6MHo2YnAy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="insta-btn"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              Follow Us @30degreeturn
+            </a>
           </div>
+
           <div className="sb-footer-col">
-            <h4 className="sb-footer-title">Responsibility</h4>
-            <ul className="sb-footer-links">
-              <li><a href="#" className="sb-footer-link">Diversity & Inclusion</a></li>
-              <li><a href="#" className="sb-footer-link">Ethical Sourcing</a></li>
-              <li><a href="#" className="sb-footer-link">Environmental Stewardship</a></li>
-            </ul>
-          </div>
-          <div className="sb-footer-col">
-            <h4 className="sb-footer-title">Quick Links</h4>
-            <ul className="sb-footer-links">
-              <li><a href="#" className="sb-footer-link">Delivery FAQs</a></li>
-              <li><a href="#" className="sb-footer-link">Customer Service</a></li>
-              <li><a href="#" className="sb-footer-link">Beverage Subscription</a></li>
-            </ul>
-          </div>
-          <div className="sb-footer-col">
-            <h4 className="sb-footer-title">Social Media</h4>
-            <div className="sb-footer-socials">
-              <a href="#" className="social-icon-circle">X</a>
-              <a href="#" className="social-icon-circle">f</a>
-              <a href="#" className="social-icon-circle">in</a>
-            </div>
-            <div className="app-badges">
-              <div className="badge-img" style={{ display: 'inline-block', width: '135px', height: '40px' }}>
-                <span style={{ fontSize: '0.65rem', color: 'white', display: 'block', padding: '5px 10px', textAlign: 'center', border: '1px solid white', borderRadius: '4px' }}>GET IT ON Google Play</span>
-              </div>
-              <div className="badge-img" style={{ display: 'inline-block', width: '135px', height: '40px', marginTop: '0.5rem' }}>
-                <span style={{ fontSize: '0.65rem', color: 'white', display: 'block', padding: '5px 10px', textAlign: 'center', border: '1px solid white', borderRadius: '4px' }}>Download on App Store</span>
-              </div>
-            </div>
+            <h4 className="sb-footer-title">Find Our Location</h4>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3752.5245784273257!2d78.33374260315875!3d17.398368777309255!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb95001caf8f5f%3A0xf52881a301202bfe!2s30degreeturn!5e0!3m2!1sen!2sin!4v1788084382603!5m2!1sen!2sin"
+              width="100%"
+              height="200"
+              style={{ border: 0, borderRadius: '16px' }}
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+            ></iframe>
           </div>
         </div>
 
         <div className="sb-footer-bottom">
-          <div className="sb-footer-bottom-links">
-            <a href="#" className="sb-footer-bottom-link">Web Accessibility</a>
-            <span>|</span>
-            <a href="#" className="sb-footer-bottom-link">Privacy Statement</a>
-            <span>|</span>
-            <a href="#" className="sb-footer-bottom-link">Terms of Use</a>
-            <span>|</span>
-            <a href="#" className="sb-footer-bottom-link">Contact Us</a>
-          </div>
-          <p>&copy; {new Date().getFullYear()} 30&deg; Turn Cafe Company. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} 30&deg; Turn Cafe. All rights reserved.</p>
         </div>
       </footer>
     </>

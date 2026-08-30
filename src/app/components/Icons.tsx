@@ -436,3 +436,24 @@ export const HeartCupIcon: React.FC<IconProps> = ({ size = 20, ...props }) => (
     <line x1="14" y1="2" x2="14" y2="4" />
   </svg>
 );
+
+export const PaletteIcon: React.FC<IconProps> = ({ size = 20, ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+    <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+    <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+    <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.92 0 1.7-.72 1.7-1.65 0-.43-.17-.83-.44-1.14-.29-.33-.46-.77-.46-1.21 0-1.1.9-2 2-2h1.7c3.3 0 6-2.7 6-6 0-4.97-4.48-9-10-9z" />
+  </svg>
+);

@@ -11,10 +11,11 @@ import {
   LeafIcon,
   CakeIcon,
   SnowflakeIcon,
-  HeartCupIcon
+  HeartCupIcon,
+  PaletteIcon
 } from '@/app/components/Icons';
 
-const DESKTOP_VIDEO_URL = "/cup.gif";
+const DESKTOP_VIDEO_URL = "/cup-deskto.gif";
 const MOBILE_VIDEO_URL = "/cup.gif";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
   const [customer, setCustomer] = useState<{ name: string; mobile: string } | null>(null);
   const [videoUrl, setVideoUrl] = useState(DESKTOP_VIDEO_URL);
   const [heroBgColor, setHeroBgColor] = useState('#cbab80');
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
 
   // Read cart quantity, customer login, and handle responsive video swaps on mount
@@ -138,12 +140,12 @@ export default function Home() {
 
         .hero-word {
           font-family: 'Tanker-Regular', 'Inter', sans-serif;
-          font-size: 150px;
+          font-size: 88px;
           font-weight: 400;
           letter-spacing: 5px;
           color: var(--primary-dark);
           text-transform: uppercase;
-          line-height: 0.85;
+          line-height: 0.88;
           display: block;
           text-align: center;
           opacity: 0.92;
@@ -160,7 +162,7 @@ export default function Home() {
           }
         }
 
-        /* Color Picker Widget over Hero */
+        /* Collapsible Color Picker Widget over Hero */
         .hero-color-picker {
           position: absolute;
           bottom: 1.25rem;
@@ -168,15 +170,50 @@ export default function Home() {
           z-index: 10;
           display: flex;
           align-items: center;
+          gap: 0.6rem;
+        }
+
+        .color-picker-toggle-btn {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          background: rgba(18, 9, 5, 0.78);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(255, 255, 255, 0.25);
+          color: #f2ebdf;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+          transition: all 0.35s cubic-bezier(0.25, 1, 0.35, 1);
+        }
+
+        .color-picker-toggle-btn:hover {
+          transform: scale(1.1) rotate(12deg);
+          background: rgba(152, 78, 49, 0.95);
+          border-color: #ffffff;
+          box-shadow: 0 6px 22px rgba(152, 78, 49, 0.45);
+        }
+
+        .color-presets-panel {
+          display: flex;
+          align-items: center;
           gap: 0.5rem;
-          background: rgba(0, 0, 0, 0.55);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          padding: 0.4rem 0.75rem;
+          background: rgba(18, 9, 5, 0.85);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          padding: 0.45rem 0.85rem;
           border-radius: var(--radius-full);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-          transition: all 0.3s ease;
+          border: 1px solid rgba(255, 255, 255, 0.25);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+          animation: fadeInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInRight {
+          from { opacity: 0; transform: translateX(12px); }
+          to { opacity: 1; transform: translateX(0); }
         }
 
         .color-picker-label {
@@ -240,10 +277,12 @@ export default function Home() {
         @media (max-width: 768px) {
           .hero-color-picker {
             bottom: 1rem;
-            left: 50%;
-            right: auto;
-            transform: translateX(-50%);
-            padding: 0.35rem 0.65rem;
+            right: 1rem;
+          }
+
+          .color-picker-toggle-btn {
+            width: 40px;
+            height: 40px;
           }
 
           .color-swatch {
@@ -781,29 +820,42 @@ export default function Home() {
           )}
         </div>
 
-        {/* Dynamic Color Picker Widget */}
+        {/* Collapsible Color Picker Widget in bottom right corner */}
         <div className="hero-color-picker">
-          <span className="color-picker-label">Bg:</span>
-          <div className="color-presets">
-            {['#cbab80', '#f2ebdf', '#ebdcc9', '#faf3ec', '#984e31', '#6e341f', '#4a2e1c'].map((color) => (
-              <button
-                key={color}
-                className={`color-swatch ${heroBgColor === color ? 'active' : ''}`}
-                style={{ backgroundColor: color }}
-                onClick={() => setHeroBgColor(color)}
-                title={`Switch background to ${color}`}
-              />
-            ))}
-            <label className="color-custom-btn" title="Pick custom color">
-              <input
-                type="color"
-                value={heroBgColor}
-                onChange={(e) => setHeroBgColor(e.target.value)}
-                className="color-input"
-              />
-              <span className="color-custom-icon">🎨</span>
-            </label>
-          </div>
+          <button
+            className="color-picker-toggle-btn"
+            onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
+            title="Customize Hero Theme Background"
+            aria-label="Toggle Color Palette"
+          >
+            <PaletteIcon size={20} />
+          </button>
+
+          {isColorPickerOpen && (
+            <div className="color-presets-panel">
+              <span className="color-picker-label">Bg:</span>
+              <div className="color-presets">
+                {['#cbab80', '#f2ebdf', '#ebdcc9', '#faf3ec', '#984e31', '#6e341f', '#4a2e1c'].map((color) => (
+                  <button
+                    key={color}
+                    className={`color-swatch ${heroBgColor === color ? 'active' : ''}`}
+                    style={{ backgroundColor: color }}
+                    onClick={() => setHeroBgColor(color)}
+                    title={`Switch background to ${color}`}
+                  />
+                ))}
+                <label className="color-custom-btn" title="Pick custom color">
+                  <input
+                    type="color"
+                    value={heroBgColor}
+                    onChange={(e) => setHeroBgColor(e.target.value)}
+                    className="color-input"
+                  />
+                  <span className="color-custom-icon">🎨</span>
+                </label>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
