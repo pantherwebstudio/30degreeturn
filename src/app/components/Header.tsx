@@ -674,13 +674,14 @@ export default function Header({
 
           @media (max-width: 768px) {
             .sb-header.hero-overlay .logo-box img {
-              width: 60px;
-              height: 60px;
+              width: 85px;
+              height: 85px;
+              filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
             }
 
             .sb-header:not(.hero-overlay) .logo-box img {
-              width: 44px;
-              height: 44px;
+              width: 46px;
+              height: 46px;
             }
           }
         `}</style>
