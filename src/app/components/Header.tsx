@@ -110,19 +110,20 @@ export default function Header({
         }
 
         .sb-header.hero-overlay .sb-nav {
-          background-color: rgba(255, 255, 255, 0.12);
-          border-color: rgba(255, 255, 255, 0.25);
-          backdrop-filter: blur(4px);
-          -webkit-backdrop-filter: blur(4px);
+          background-color: transparent !important;
+          background: transparent !important;
+          border-color: rgba(255, 255, 255, 0.35) !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
         }
 
         .sb-header.hero-overlay .sb-nav-link {
-          color: rgba(255, 255, 255, 0.85);
+          color: rgba(255, 255, 255, 0.9);
         }
 
         .sb-header.hero-overlay .sb-nav-link:hover {
           color: white;
-          background-color: rgba(255, 255, 255, 0.18);
+          background-color: rgba(255, 255, 255, 0.2);
         }
 
         .sb-header.hero-overlay .sb-nav-link.active {
@@ -136,26 +137,26 @@ export default function Header({
         }
 
         .sb-header.hero-overlay .sb-nav-cart-btn {
-          color: rgba(255, 255, 255, 0.85);
+          color: rgba(255, 255, 255, 0.9);
         }
 
         .sb-header.hero-overlay .sb-nav-cart-btn:hover {
           color: white;
-          background-color: rgba(255, 255, 255, 0.18);
+          background-color: rgba(255, 255, 255, 0.2);
         }
 
         .sb-header.hero-overlay .sb-nav-cart-btn::before {
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.2);
         }
 
         .sb-header.hero-overlay .search-input-trigger {
           background-color: rgba(255, 255, 255, 0.15);
           border-color: rgba(255, 255, 255, 0.3);
-          color: rgba(255, 255, 255, 0.8);
+          color: rgba(255, 255, 255, 0.9);
         }
 
         .sb-header.hero-overlay .search-icon {
-          color: rgba(255, 255, 255, 0.7);
+          color: rgba(255, 255, 255, 0.8);
         }
 
         .sb-header.hero-overlay .search-input {
@@ -165,7 +166,7 @@ export default function Header({
         }
 
         .sb-header.hero-overlay .search-input::placeholder {
-          color: rgba(255, 255, 255, 0.6);
+          color: rgba(255, 255, 255, 0.7);
         }
 
         .sb-header.hero-overlay .profile-btn {
@@ -221,8 +222,8 @@ export default function Header({
         }
 
         .logo-box img {
-          width: 180px;
-          height: 180px;
+          width: 100px;
+          height: 100px;
           border-radius: 50%;
           object-fit: cover;
           transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
