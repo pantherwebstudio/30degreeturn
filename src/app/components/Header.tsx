@@ -220,8 +220,8 @@ export default function Header({
         }
 
         .logo-box img {
-          width: 100px;
-          height: 100px;
+          width: 180px;
+          height: 180px;
           border-radius: 50%;
           object-fit: cover;
           transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);

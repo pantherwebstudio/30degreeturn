@@ -13,7 +13,7 @@ import {
 } from '@/app/components/Icons';
 
 const DESKTOP_VIDEO_URL = "./Untitled design.mp4";
-const MOBILE_VIDEO_URL = "Untitled-1.mp4";
+const MOBILE_VIDEO_URL = "/clean_Rotating_glass_with_coffee_beans_202608301101.mp4";
 
 export default function Home() {
   const router = useRouter();
