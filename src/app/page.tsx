@@ -15,14 +15,14 @@ import {
 } from '@/app/components/Icons';
 
 const DESKTOP_VIDEO_URL = "./Untitled design.mp4";
-const MOBILE_VIDEO_URL = "/Untitled design.gif";
+const MOBILE_VIDEO_URL = "/cup.gif";
 
 export default function Home() {
   const router = useRouter();
   const [cartCount, setCartCount] = useState(0);
   const [customer, setCustomer] = useState<{ name: string; mobile: string } | null>(null);
   const [videoUrl, setVideoUrl] = useState(DESKTOP_VIDEO_URL);
-  const [heroBgColor, setHeroBgColor] = useState('#0f1914');
+  const [heroBgColor, setHeroBgColor] = useState('#f2ebdf');
   const [isPastHero, setIsPastHero] = useState(false);
 
   // Read cart quantity, customer login, and handle responsive video swaps on mount
@@ -210,7 +210,8 @@ export default function Home() {
           }
         }
 
-        .cinema-video-wrap video {
+        .cinema-video-wrap video,
+        .cinema-video-wrap img {
           position: absolute;
           inset: 0;
           width: 100%;
@@ -720,7 +721,10 @@ export default function Home() {
               onContextMenu={(e) => e.preventDefault()}
             >
               {videoUrl.endsWith('.webm') ? (
-                <source src={videoUrl} type='video/webm; codecs="vp9"' />
+                <>
+                  <source src={videoUrl} type='video/webm; codecs="vp9, opus"' />
+                  <source src={videoUrl} type="video/webm" />
+                </>
               ) : (
                 <source src={videoUrl} type="video/mp4" />
               )}
@@ -733,7 +737,7 @@ export default function Home() {
         <div className="hero-color-picker">
           <span className="color-picker-label">Bg:</span>
           <div className="color-presets">
-            {['#0f1914', '#984e31', '#317b98', '#f2ebdf', '#1a100c', '#ffcd7d'].map((color) => (
+            {['#f2ebdf', '#ebdcc9', '#faf3ec', '#984e31', '#6e341f', '#4a2e1c'].map((color) => (
               <button
                 key={color}
                 className={`color-swatch ${heroBgColor === color ? 'active' : ''}`}
