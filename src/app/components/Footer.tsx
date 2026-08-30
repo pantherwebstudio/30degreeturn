@@ -118,7 +118,7 @@ export default function Footer() {
               <h4 className="sb-footer-title" style={{ margin: 0 }}>30° Turn Cafe</h4>
             </div>
             <p className="sb-footer-desc">
-              A destination for handcrafted, high-quality bakers creations that blend indulgence with accessibility. Every product is made with care, creativity, and a commitment to excellence—offering a fresh turn toward flavor, joy, and everyday celebration.
+              A destination for handcrafted, high-quality bakers creations that blend indulgence with accessibility. Every product is made with care, creativity, and a commitment to excellence, offering a fresh turn toward flavor, joy, and everyday celebration.
             </p>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '0.25rem', flexWrap: 'wrap' }}>
               <a

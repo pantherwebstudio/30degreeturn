@@ -84,7 +84,6 @@ interface Order {
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  { id: 'test1', name: '🧪 PhonePe Test Brew', price: 1.00, description: '₹1 Test item for live & sandbox PhonePe payment verification', category: 'hot-coffee', subCategory: 'Test Item', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },
   // --- HOT COFFEE ---
   { id: 'hc1', name: 'Espresso (Single)', price: 39, description: 'Freshly brewed single shot of espresso', category: 'hot-coffee', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },
   { id: 'hc2', name: 'Espresso (Double)', price: 49, description: 'Freshly brewed double shot of espresso', category: 'hot-coffee', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },
@@ -273,7 +272,7 @@ function MenuContent() {
     if (loginParam === 'open') {
       setIsLoginOpen(true);
     }
-    // Handle PayU payment callback status
+    // Handle payment callback status
     const paymentParam = searchParams.get('payment');
     if (paymentParam === 'success') {
       const orderId = searchParams.get('orderId');
@@ -445,7 +444,7 @@ function MenuContent() {
   const tax = cartSubtotal * 0.08;
   const cartTotal = cartSubtotal + tax;
 
-  // Handles Checkout Submit — initiates PayU payment
+  // Handles Checkout Submit
   const handleCheckoutSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -486,7 +485,7 @@ function MenuContent() {
         items: orderItems
       }));
 
-      // Call server to initiate PhonePe Payment Gateway transaction
+      // Call server to create Cashfree order → get payment_session_id
       const res = await fetch('/api/payment/initiate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -500,14 +499,26 @@ function MenuContent() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'PhonePe payment initiation failed.');
+      if (!res.ok) throw new Error(data.error || 'Payment initiation failed.');
 
-      if (data.redirectUrl) {
-        // Redirect customer directly to PhonePe Payment Gateway
-        window.location.href = data.redirectUrl;
-      } else {
-        throw new Error('No checkout URL returned from PhonePe.');
-      }
+      const { paymentSessionId, cfEnv } = data;
+
+      // Dynamically load Cashfree JS SDK and open checkout modal
+      await new Promise<void>((resolve, reject) => {
+        if ((window as any).Cashfree) { resolve(); return; }
+        const script = document.createElement('script');
+        script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error('Failed to load Cashfree SDK.'));
+        document.head.appendChild(script);
+      });
+
+      const cashfree = (window as any).Cashfree({ mode: cfEnv === 'production' ? 'production' : 'sandbox' });
+
+      cashfree.checkout({
+        paymentSessionId,
+        redirectTarget: '_self',
+      });
 
     } catch (err: any) {
       setSubmitError(err.message || 'Payment error. Please try again.');
@@ -1394,11 +1405,6 @@ function MenuContent() {
         </div>
       )}
 
-      <div className="promo-ribbon">
-        <span>Savor the new season. Get organic coffee and warm pastries delivered or pickup fresh.</span>
-        <button className="ribbon-btn" onClick={() => setIsLoginOpen(true)}>Sign In</button>
-      </div>
-
       {/* Curation Categories for all 15 Menu Sections */}
       <section className="curations-section">
         <div className="curations-header">
@@ -1783,7 +1789,7 @@ function MenuContent() {
             </div>
             <div className="modal-body">
               <p style={{ color: 'var(--text-medium)', marginBottom: '1.5rem', fontSize: '0.85rem' }}>
-                Enter your details to proceed to secure payment via PayU. Your order will be confirmed after payment.
+                Enter your details to proceed to secure online payment. Your order will be confirmed after payment.
               </p>
 
               {/* Only show inputs if the customer is not logged in */}
@@ -1834,7 +1840,7 @@ function MenuContent() {
               {submitError && <p className="error-message">{submitError}</p>}
 
               <button type="submit" className="btn-primary submit-btn" disabled={isSubmitting}>
-                {isSubmitting ? 'Redirecting to PayU...' : '🔒 Pay Now'}
+                {isSubmitting ? 'Processing Payment...' : '🔒 Pay Now'}
               </button>
             </div>
           </form>

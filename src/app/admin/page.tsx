@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { PhoneIcon, RefreshIcon, ClipboardIcon, PlusIcon, CloseIcon, CheckIcon, SparklesIcon, CoffeeIcon, UserIcon } from '@/app/components/Icons';
+import { PhoneIcon, RefreshIcon, ClipboardIcon, PlusIcon, CloseIcon, CheckIcon, SparklesIcon, CoffeeIcon, UserIcon, DeliveryIcon, DineInIcon } from '@/app/components/Icons';
 
 interface OrderItem {
   name: string;
@@ -336,7 +336,7 @@ export default function AdminDashboard() {
         .admin-header {
           background: linear-gradient(135deg, #21100a 0%, #3a1b11 100%);
           color: #ffffff;
-          padding: 1.1rem 2.5rem;
+          padding: 1rem 2rem;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -344,23 +344,41 @@ export default function AdminDashboard() {
           position: sticky;
           top: 0;
           z-index: 100;
+          flex-wrap: wrap;
+          gap: 1rem;
         }
 
         .admin-title-box {
           display: flex;
           align-items: center;
-          gap: 1rem;
+          gap: 0.85rem;
+        }
+
+        /* Circle placeholder with cream background for logo */
+        .admin-header-logo-circle {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background-color: #FAF3EC;
+          border: 1.5px solid rgba(203, 171, 128, 0.4);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.25rem;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          flex-shrink: 0;
         }
 
         .admin-logo-img {
-          width: 44px;
-          height: auto;
+          width: 100%;
+          height: 100%;
           object-fit: contain;
+          border-radius: 50%;
         }
 
         .admin-brand-title {
           font-family: var(--font-serif);
-          font-size: 1.35rem;
+          font-size: 1.3rem;
           font-weight: 700;
           letter-spacing: 0.5px;
           color: #FAF3EC;
@@ -370,9 +388,9 @@ export default function AdminDashboard() {
           background: rgba(203, 171, 128, 0.2);
           border: 1px solid rgba(203, 171, 128, 0.4);
           color: #CBAB80;
-          font-size: 0.72rem;
+          font-size: 0.7rem;
           font-weight: 700;
-          padding: 0.25rem 0.75rem;
+          padding: 0.2rem 0.65rem;
           border-radius: 999px;
           text-transform: uppercase;
           letter-spacing: 1px;
@@ -381,7 +399,8 @@ export default function AdminDashboard() {
         .user-info {
           display: flex;
           align-items: center;
-          gap: 1.25rem;
+          gap: 1.1rem;
+          flex-wrap: wrap;
         }
 
         .live-dot {
@@ -401,7 +420,7 @@ export default function AdminDashboard() {
         }
 
         .user-name {
-          font-size: 0.9rem;
+          font-size: 0.88rem;
           font-weight: 600;
           color: #FAF3EC;
         }
@@ -410,9 +429,9 @@ export default function AdminDashboard() {
           background: rgba(255, 255, 255, 0.1);
           border: 1px solid rgba(255, 255, 255, 0.2);
           color: white;
-          padding: 0.45rem 1rem;
-          border-radius: 12px;
-          font-size: 0.85rem;
+          padding: 0.4rem 0.9rem;
+          border-radius: 10px;
+          font-size: 0.82rem;
           font-weight: 600;
           transition: all 0.2s ease;
           cursor: pointer;
@@ -428,26 +447,26 @@ export default function AdminDashboard() {
         .dashboard-content {
           max-width: 1320px;
           margin: 0 auto;
-          padding: 2.25rem 2rem;
+          padding: 1.75rem 1.25rem;
         }
 
         /* Main Tabs Switcher */
         .main-tabs-row {
           display: flex;
-          gap: 1rem;
-          margin-bottom: 2rem;
+          gap: 0.75rem;
+          margin-bottom: 1.75rem;
           background: #ffffff;
-          padding: 0.5rem;
-          border-radius: 20px;
+          padding: 0.4rem;
+          border-radius: 18px;
           border: 1px solid rgba(152, 78, 49, 0.15);
           box-shadow: 0 4px 15px rgba(33, 16, 10, 0.04);
         }
 
         .main-tab-btn {
           flex: 1;
-          font-size: 1.05rem;
+          font-size: 0.98rem;
           font-weight: 700;
-          padding: 0.9rem 1.5rem;
+          padding: 0.8rem 1.25rem;
           border: none;
           background: transparent;
           color: #6E5444;
@@ -457,7 +476,7 @@ export default function AdminDashboard() {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.6rem;
+          gap: 0.5rem;
         }
 
         .main-tab-btn.active {
@@ -469,16 +488,16 @@ export default function AdminDashboard() {
         /* Metrics Row */
         .metrics-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-          gap: 1.25rem;
-          margin-bottom: 2.25rem;
+          grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+          gap: 1rem;
+          margin-bottom: 1.75rem;
         }
 
         .metric-card {
           background: #ffffff;
-          padding: 1.5rem;
-          border-radius: 22px;
-          box-shadow: 0 8px 25px rgba(33, 16, 10, 0.05);
+          padding: 1.25rem 1.5rem;
+          border-radius: 20px;
+          box-shadow: 0 6px 20px rgba(33, 16, 10, 0.04);
           position: relative;
           overflow: hidden;
           border: 1px solid rgba(152, 78, 49, 0.12);
@@ -486,12 +505,12 @@ export default function AdminDashboard() {
         }
 
         .metric-card:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 12px 30px rgba(33, 16, 10, 0.08);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(33, 16, 10, 0.08);
         }
 
         .metric-label {
-          font-size: 0.8rem;
+          font-size: 0.78rem;
           color: #6E5444;
           text-transform: uppercase;
           font-weight: 700;
@@ -499,11 +518,11 @@ export default function AdminDashboard() {
         }
 
         .metric-value {
-          font-size: 2.4rem;
+          font-size: 2.1rem;
           font-weight: 800;
           font-family: var(--font-serif);
           color: #21100a;
-          margin-top: 0.4rem;
+          margin-top: 0.3rem;
         }
 
         .metric-accent {
@@ -525,31 +544,46 @@ export default function AdminDashboard() {
           flex-wrap: wrap;
           align-items: center;
           justify-content: space-between;
-          gap: 1.25rem;
-          margin-bottom: 1.75rem;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
           background: #ffffff;
-          padding: 1rem 1.25rem;
-          border-radius: 20px;
+          padding: 0.85rem 1.1rem;
+          border-radius: 18px;
           border: 1px solid rgba(152, 78, 49, 0.12);
           box-shadow: 0 4px 15px rgba(33, 16, 10, 0.03);
         }
 
         .filter-tabs {
           display: flex;
-          gap: 0.5rem;
-          flex-wrap: wrap;
+          gap: 0.4rem;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          padding-bottom: 0.2rem;
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .filter-tabs::-webkit-scrollbar {
+          height: 3px;
+        }
+
+        .filter-tabs::-webkit-scrollbar-thumb {
+          background: rgba(152, 78, 49, 0.2);
+          border-radius: 999px;
         }
 
         .filter-tab {
-          padding: 0.55rem 1.1rem;
+          padding: 0.45rem 0.95rem;
           border-radius: 999px;
           border: 1.5px solid rgba(152, 78, 49, 0.15);
           background-color: #FAF3EC;
           color: #6E5444;
-          font-size: 0.85rem;
+          font-size: 0.82rem;
           font-weight: 700;
           cursor: pointer;
+          white-space: nowrap;
           transition: all 0.2s ease;
+          flex-shrink: 0;
         }
 
         .filter-tab.active {
@@ -562,13 +596,13 @@ export default function AdminDashboard() {
         .refresh-btn {
           display: inline-flex;
           align-items: center;
-          gap: 0.5rem;
-          padding: 0.6rem 1.2rem;
-          border-radius: 14px;
+          gap: 0.45rem;
+          padding: 0.55rem 1.1rem;
+          border-radius: 12px;
           border: 1.5px solid rgba(152, 78, 49, 0.2);
           background-color: #ffffff;
           color: #21100a;
-          font-size: 0.88rem;
+          font-size: 0.85rem;
           font-weight: 700;
           cursor: pointer;
           transition: all 0.2s ease;
@@ -584,49 +618,49 @@ export default function AdminDashboard() {
         .orders-container {
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          gap: 1.1rem;
         }
 
         .order-row-card {
           background: #ffffff;
-          border-radius: 22px;
+          border-radius: 20px;
           border: 1px solid rgba(152, 78, 49, 0.15);
-          padding: 1.5rem 1.75rem;
+          padding: 1.35rem 1.5rem;
           display: grid;
-          grid-template-columns: 1.4fr 1.6fr 2fr 1.4fr;
+          grid-template-columns: 1.3fr 1.5fr 2fr 1.3fr;
           align-items: center;
-          gap: 1.75rem;
+          gap: 1.25rem;
           box-shadow: 0 6px 20px rgba(33, 16, 10, 0.04);
           transition: all 0.25s ease;
         }
 
         .order-row-card:hover {
-          box-shadow: 0 12px 30px rgba(33, 16, 10, 0.08);
+          box-shadow: 0 10px 25px rgba(33, 16, 10, 0.08);
           border-color: rgba(152, 78, 49, 0.3);
         }
 
         .order-ref {
           font-weight: 800;
-          font-size: 1.05rem;
+          font-size: 1rem;
           color: #984e31;
           font-family: monospace;
           letter-spacing: 0.5px;
         }
 
         .order-time {
-          font-size: 0.8rem;
+          font-size: 0.78rem;
           color: #6E5444;
           margin-top: 0.2rem;
         }
 
         .cust-name {
           font-weight: 800;
-          font-size: 1.05rem;
+          font-size: 1rem;
           color: #21100a;
         }
 
         .cust-phone {
-          font-size: 0.88rem;
+          font-size: 0.85rem;
           color: #6E5444;
           font-weight: 600;
           margin-top: 0.2rem;
@@ -635,12 +669,12 @@ export default function AdminDashboard() {
         .order-type-badge {
           display: inline-flex;
           align-items: center;
-          gap: 0.4rem;
-          font-size: 0.78rem;
+          gap: 0.35rem;
+          font-size: 0.75rem;
           font-weight: 800;
-          padding: 0.3rem 0.75rem;
+          padding: 0.25rem 0.65rem;
           border-radius: 999px;
-          margin-top: 0.4rem;
+          margin-top: 0.35rem;
         }
 
         .order-type-badge.delivery {
@@ -657,9 +691,9 @@ export default function AdminDashboard() {
 
         .status-badge {
           display: inline-block;
-          padding: 0.3rem 0.75rem;
+          padding: 0.25rem 0.65rem;
           border-radius: 999px;
-          font-size: 0.75rem;
+          font-size: 0.72rem;
           font-weight: 800;
           text-transform: uppercase;
           letter-spacing: 0.8px;
@@ -674,12 +708,12 @@ export default function AdminDashboard() {
           list-style: none;
           padding: 0;
           margin: 0;
-          font-size: 0.88rem;
+          font-size: 0.85rem;
           line-height: 1.5;
         }
 
         .amount-box {
-          font-size: 1.35rem;
+          font-size: 1.25rem;
           font-weight: 800;
           color: #984e31;
           font-family: var(--font-serif);
@@ -687,14 +721,15 @@ export default function AdminDashboard() {
 
         .action-btn-row {
           display: flex;
-          gap: 0.5rem;
-          margin-top: 0.5rem;
+          gap: 0.45rem;
+          margin-top: 0.4rem;
+          flex-wrap: wrap;
         }
 
         .act-btn {
-          padding: 0.5rem 0.95rem;
-          border-radius: 12px;
-          font-size: 0.82rem;
+          padding: 0.45rem 0.85rem;
+          border-radius: 10px;
+          font-size: 0.8rem;
           font-weight: 700;
           border: 1px solid transparent;
           cursor: pointer;
@@ -713,30 +748,30 @@ export default function AdminDashboard() {
         /* Menu Admin Grid */
         .menu-admin-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-          gap: 1.5rem;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 1.25rem;
         }
 
         .menu-admin-card {
           background: #ffffff;
-          border-radius: 24px;
+          border-radius: 20px;
           border: 1px solid rgba(152, 78, 49, 0.15);
           overflow: hidden;
-          box-shadow: 0 8px 25px rgba(33, 16, 10, 0.04);
+          box-shadow: 0 6px 20px rgba(33, 16, 10, 0.04);
           display: flex;
           flex-direction: column;
           transition: all 0.25s ease;
         }
 
         .menu-admin-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 14px 35px rgba(33, 16, 10, 0.08);
+          transform: translateY(-3px);
+          box-shadow: 0 12px 30px rgba(33, 16, 10, 0.08);
           border-color: rgba(152, 78, 49, 0.3);
         }
 
         .menu-card-img-wrap {
           width: 100%;
-          height: 175px;
+          height: 165px;
           position: relative;
           background: #FAF3EC;
           overflow: hidden;
@@ -755,11 +790,11 @@ export default function AdminDashboard() {
 
         .stock-tag {
           position: absolute;
-          top: 0.75rem;
-          right: 0.75rem;
-          padding: 0.25rem 0.75rem;
+          top: 0.65rem;
+          right: 0.65rem;
+          padding: 0.2rem 0.65rem;
           border-radius: 999px;
-          font-size: 0.72rem;
+          font-size: 0.7rem;
           font-weight: 800;
           text-transform: uppercase;
           backdrop-filter: blur(8px);
@@ -769,7 +804,7 @@ export default function AdminDashboard() {
         .stock-tag.out-stock { background: rgba(198, 40, 40, 0.9); color: white; }
 
         .menu-card-body {
-          padding: 1.35rem;
+          padding: 1.2rem;
           display: flex;
           flex-direction: column;
           flex: 1;
@@ -777,41 +812,42 @@ export default function AdminDashboard() {
 
         .menu-card-title {
           font-weight: 800;
-          font-size: 1.15rem;
+          font-size: 1.05rem;
           color: #21100a;
         }
 
         .menu-card-price {
           font-weight: 800;
-          font-size: 1.15rem;
+          font-size: 1.05rem;
           color: #984e31;
           font-family: var(--font-serif);
         }
 
         .menu-card-desc {
-          font-size: 0.85rem;
+          font-size: 0.82rem;
           color: #6E5444;
-          margin: 0.6rem 0 1rem 0;
+          margin: 0.5rem 0 0.85rem 0;
           line-height: 1.45;
           flex: 1;
         }
 
         .menu-card-cat-badge {
-          font-size: 0.72rem;
+          font-size: 0.7rem;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.5px;
           color: #984e31;
           background: #FAF3EC;
-          padding: 0.25rem 0.6rem;
+          padding: 0.2rem 0.55rem;
           border-radius: 6px;
           display: inline-block;
-          margin-bottom: 0.85rem;
+          margin-bottom: 0.75rem;
         }
 
         .menu-card-actions {
           display: flex;
-          gap: 0.5rem;
+          gap: 0.4rem;
+          flex-wrap: wrap;
         }
 
         /* Modal Styles */
@@ -827,16 +863,16 @@ export default function AdminDashboard() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 1.5rem;
+          padding: 1rem;
         }
 
         .admin-modal-card {
           background: #FAF3EC;
           border: 1px solid rgba(152, 78, 49, 0.2);
-          border-radius: 28px;
-          max-width: 560px;
+          border-radius: 24px;
+          max-width: 540px;
           width: 100%;
-          padding: 2.25rem;
+          padding: 1.75rem;
           box-shadow: 0 20px 50px rgba(33, 16, 10, 0.3);
           max-height: 90vh;
           overflow-y: auto;
@@ -845,11 +881,11 @@ export default function AdminDashboard() {
 
         .modal-form-input {
           width: 100%;
-          padding: 0.75rem 1rem;
-          border-radius: 14px;
+          padding: 0.7rem 0.9rem;
+          border-radius: 12px;
           background-color: #ffffff;
           border: 1.5px solid rgba(152, 78, 49, 0.2);
-          font-size: 0.92rem;
+          font-size: 0.9rem;
           color: #21100a;
           outline: none;
         }
@@ -857,15 +893,65 @@ export default function AdminDashboard() {
         .modal-form-input:focus {
           border-color: #984e31;
         }
+
+        /* RESPONSIVE MEDIA QUERIES FOR MOBILE */
+        @media (max-width: 900px) {
+          .order-row-card {
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+            padding: 1.15rem;
+          }
+          .action-btn-row {
+            justify-content: flex-start !important;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .admin-header {
+            padding: 0.85rem 1rem;
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .admin-title-box {
+            justify-content: flex-start;
+          }
+          .user-info {
+            justify-content: space-between;
+          }
+          .main-tabs-row {
+            flex-direction: column;
+          }
+          .metrics-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+          }
+          .metric-value {
+            font-size: 1.65rem;
+          }
+          .controls-row {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .admin-modal-card {
+            padding: 1.25rem 1rem;
+            border-radius: 20px;
+          }
+        }
       `}</style>
 
       {/* Header */}
       <header className="admin-header">
         <div className="admin-title-box">
-          <img src="/logo-30degreeturn.jpeg" alt="30° Turn Cafe Logo" className="admin-logo-img" />
-          <h1 className="admin-brand-title">30° TURN CAFE</h1>
-          <span className="admin-badge">Manager Portal</span>
+          {/* White circle placeholder with creamy background for logo */}
+          <div className="admin-header-logo-circle">
+            <img src="/logo-30degreeturn.jpeg" alt="30° Turn Cafe Logo" className="admin-logo-img" />
+          </div>
+          <div>
+            <h1 className="admin-brand-title" style={{ margin: 0 }}>30° TURN CAFE</h1>
+            <span className="admin-badge">Manager Portal</span>
+          </div>
         </div>
+
         {sessionUser && (
           <div className="user-info">
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.82rem', color: '#a5d6a7' }}>
@@ -886,13 +972,13 @@ export default function AdminDashboard() {
             className={`main-tab-btn ${activeMainTab === 'orders' ? 'active' : ''}`}
             onClick={() => setActiveMainTab('orders')}
           >
-            📋 Cafe Live Orders ({orders.length})
+            <ClipboardIcon size={18} /> Cafe Live Orders ({orders.length})
           </button>
           <button
             className={`main-tab-btn ${activeMainTab === 'menu' ? 'active' : ''}`}
             onClick={() => setActiveMainTab('menu')}
           >
-            ☕ Live Menu Manager ({menuItems.length})
+            <CoffeeIcon size={18} /> Live Menu Manager ({menuItems.length})
           </button>
         </div>
 
@@ -952,10 +1038,14 @@ export default function AdminDashboard() {
                     <div>
                       <span className="order-ref">#{order.id.slice(0, 8).toUpperCase()}</span>
                       <div className="order-time">{formatDate(order.createdAt)}</div>
-                      <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                      <div style={{ marginTop: '0.4rem', display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                         <span className={`status-badge badge-${order.status}`}>{order.status}</span>
                         <span className={`order-type-badge ${order.orderType === 'delivery' ? 'delivery' : 'dine-in'}`}>
-                          {order.orderType === 'delivery' ? '🛵 Delivery' : '🍽️ Dine-In / Pickup'}
+                          {order.orderType === 'delivery' ? (
+                            <><DeliveryIcon size={14} style={{ display: 'inline-block', verticalAlign: 'middle' }} /> Delivery</>
+                          ) : (
+                            <><DineInIcon size={14} style={{ display: 'inline-block', verticalAlign: 'middle' }} /> Dine-In / Pickup</>
+                          )}
                         </span>
                       </div>
                     </div>
@@ -980,8 +1070,8 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Total & Action Buttons Column */}
-                    <div style={{ justifySelf: 'flex-end', width: '100%', maxWidth: '190px' }}>
-                      <div className="amount-box" style={{ textAlign: 'right', marginBottom: '0.5rem' }}>
+                    <div>
+                      <div className="amount-box" style={{ marginBottom: '0.4rem' }}>
                         ₹{order.totalAmount.toFixed(2)}
                       </div>
 
@@ -989,7 +1079,7 @@ export default function AdminDashboard() {
                         {updatingId === order.id ? (
                           <span style={{ fontSize: '0.85rem', color: '#6E5444', fontStyle: 'italic' }}>Updating...</span>
                         ) : (
-                          <div className="action-btn-row" style={{ justifyContent: 'flex-end' }}>
+                          <div className="action-btn-row">
                             {order.status === 'pending' && (
                               <button className="act-btn act-btn-prep" onClick={() => handleUpdateStatus(order.id, 'preparing')}>Prepare</button>
                             )}
@@ -1015,18 +1105,18 @@ export default function AdminDashboard() {
         {activeMainTab === 'menu' && (
           <>
             <div className="controls-row">
-              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', flex: 1 }}>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', flex: 1, width: '100%' }}>
                 <input
                   type="text"
                   placeholder="Search live menu items..."
                   value={menuSearch}
                   onChange={e => setMenuSearch(e.target.value)}
                   className="modal-form-input"
-                  style={{ maxWidth: '280px' }}
+                  style={{ flex: 1, minWidth: '180px' }}
                 />
                 <select
                   className="modal-form-input"
-                  style={{ maxWidth: '220px' }}
+                  style={{ flex: 1, minWidth: '180px' }}
                   value={menuCatFilter}
                   onChange={e => setMenuCatFilter(e.target.value)}
                 >
@@ -1037,7 +1127,7 @@ export default function AdminDashboard() {
                 </select>
               </div>
 
-              <button className="act-btn act-btn-done" style={{ padding: '0.75rem 1.4rem', fontSize: '0.95rem', borderRadius: '14px' }} onClick={handleOpenAddModal}>
+              <button className="act-btn act-btn-done" style={{ padding: '0.75rem 1.4rem', fontSize: '0.95rem', borderRadius: '14px', width: '100%' }} onClick={handleOpenAddModal}>
                 <PlusIcon size={16} style={{ marginRight: '6px' }} /> Add New Menu Item
               </button>
             </div>
@@ -1100,7 +1190,7 @@ export default function AdminDashboard() {
         <div className="admin-modal-overlay">
           <div className="admin-modal-card">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#21100a', margin: 0 }}>
+              <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', color: '#21100a', margin: 0 }}>
                 {editingItem ? 'Edit Menu Item' : 'Add New Menu Item'}
               </h3>
               <button onClick={() => setIsMenuModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6E5444' }}>
@@ -1120,7 +1210,7 @@ export default function AdminDashboard() {
                 <input type="text" className="modal-form-input" placeholder="e.g. Biscoff Cold Brew" value={formName} onChange={e => setFormName(e.target.value)} required />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem', marginBottom: '1.1rem' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', color: '#4A2E1C', marginBottom: '0.35rem' }}>Price (₹)</label>
                   <input type="number" step="0.01" className="modal-form-input" placeholder="120" value={formPrice} onChange={e => setFormPrice(e.target.value)} required />
@@ -1142,26 +1232,26 @@ export default function AdminDashboard() {
 
               <div style={{ marginBottom: '1.25rem' }}>
                 <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', color: '#4A2E1C', marginBottom: '0.35rem' }}>Item Image (Upload File or Enter Image URL)</label>
-                <input type="file" accept="image/*" onChange={handleFileUpload} style={{ marginBottom: '0.5rem', fontSize: '0.85rem' }} />
+                <input type="file" accept="image/*" onChange={handleFileUpload} style={{ marginBottom: '0.5rem', fontSize: '0.85rem', width: '100%' }} />
                 {uploadingImage && <p style={{ fontSize: '0.8rem', color: '#984e31', fontWeight: 600 }}>Uploading image...</p>}
                 <input type="text" placeholder="https://..." className="modal-form-input" value={formImage} onChange={e => setFormImage(e.target.value)} />
                 {formImage && (
                   <div style={{ marginTop: '0.65rem' }}>
-                    <img src={formImage} alt="Preview" style={{ width: '90px', height: '90px', objectFit: 'cover', borderRadius: '12px', border: '1px solid rgba(152, 78, 49, 0.2)' }} />
+                    <img src={formImage} alt="Preview" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '12px', border: '1px solid rgba(152, 78, 49, 0.2)' }} />
                   </div>
                 )}
               </div>
 
-              <div style={{ display: 'flex', gap: '2rem', marginBottom: '1.75rem', background: '#ffffff', padding: '0.85rem 1.1rem', borderRadius: '14px', border: '1px solid rgba(152, 78, 49, 0.15)' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem', color: '#21100a' }}>
+              <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem', background: '#ffffff', padding: '0.85rem 1rem', borderRadius: '14px', border: '1px solid rgba(152, 78, 49, 0.15)', flexWrap: 'wrap' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: 700, fontSize: '0.88rem', color: '#21100a' }}>
                   <input type="checkbox" checked={formIsVeg} onChange={e => setFormIsVeg(e.target.checked)} /> Vegetarian
                 </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: 700, fontSize: '0.9rem', color: '#21100a' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: 700, fontSize: '0.88rem', color: '#21100a' }}>
                   <input type="checkbox" checked={formAvailable} onChange={e => setFormAvailable(e.target.checked)} /> In Stock
                 </label>
               </div>
 
-              <button type="submit" className="act-btn act-btn-done" style={{ width: '100%', padding: '0.95rem', fontSize: '1rem', borderRadius: '14px' }}>
+              <button type="submit" className="act-btn act-btn-done" style={{ width: '100%', padding: '0.9rem', fontSize: '0.98rem', borderRadius: '14px' }}>
                 {editingItem ? 'Save Changes' : 'Add Item to Live Menu'}
               </button>
             </form>

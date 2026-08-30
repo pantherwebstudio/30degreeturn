@@ -50,7 +50,7 @@ export default function AdminLogin() {
           align-items: center;
           justify-content: center;
           background: radial-gradient(circle at 50% 20%, #4a2e1c 0%, #21100a 80%);
-          padding: 1.5rem;
+          padding: 1.25rem;
           position: relative;
           overflow: hidden;
         }
@@ -92,15 +92,29 @@ export default function AdminLogin() {
           margin-bottom: 1.25rem;
         }
 
+        .admin-logo-circle-placeholder {
+          width: 96px;
+          height: 96px;
+          border-radius: 50%;
+          background-color: #FAF3EC;
+          border: 2px solid rgba(152, 78, 49, 0.25);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.6rem;
+          box-shadow: 0 8px 25px rgba(33, 16, 10, 0.12);
+        }
+
         .login-logo-img {
-          width: 110px;
-          height: auto;
+          width: 100%;
+          height: 100%;
           object-fit: contain;
+          border-radius: 50%;
           transition: transform 0.3s ease;
         }
 
         .login-logo-img:hover {
-          transform: scale(1.05);
+          transform: scale(1.06);
         }
 
         .login-header {
@@ -231,11 +245,23 @@ export default function AdminLogin() {
         .back-btn:hover {
           color: #984e31;
         }
+
+        @media (max-width: 480px) {
+          .login-card {
+            padding: 2.25rem 1.5rem;
+            border-radius: 22px;
+          }
+          .login-title {
+            font-size: 1.65rem;
+          }
+        }
       `}</style>
 
       <div className="login-card">
         <div className="login-logo-container">
-          <img src="/logo-30degreeturn.jpeg" alt="30° Turn Cafe Logo" className="login-logo-img" />
+          <div className="admin-logo-circle-placeholder">
+            <img src="/logo-30degreeturn.jpeg" alt="30° Turn Cafe Logo" className="login-logo-img" />
+          </div>
         </div>
 
         <div className="login-header">

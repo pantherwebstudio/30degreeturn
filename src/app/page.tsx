@@ -284,12 +284,45 @@ export default function Home() {
           cursor: pointer;
         }
 
-        .color-custom-icon {
-          font-size: 0.75rem;
-          line-height: 1;
+        .hero-glass-order-btn {
+          position: absolute;
+          top: 75%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 10;
+          background: rgba(250, 243, 236, 0.22);
+          backdrop-filter: blur(24px);
+          -webkit-backdrop-filter: blur(24px);
+          border: none;
+          color: #FAF3EC;
+          padding: 1.15rem 3.25rem;
+          border-radius: 999px;
+          font-weight: 800;
+          font-size: 1.25rem;
+          letter-spacing: 0.8px;
+          cursor: pointer;
+          box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          text-decoration: none;
+          white-space: nowrap;
+        }
+
+        .hero-glass-order-btn:hover {
+          background: rgba(255, 255, 255, 0.38);
+          color: #ffffff;
+          transform: translate(-50%, -50%) scale(1.08);
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
         }
 
         @media (max-width: 768px) {
+          .hero-glass-order-btn {
+            padding: 0.85rem 2.25rem;
+            font-size: 1rem;
+          }
+
           .hero-color-picker {
             bottom: 1rem;
             right: 1rem;
@@ -853,6 +886,14 @@ export default function Home() {
           )}
         </div>
 
+        {/* Floating Transparent Glass Order Now Button */}
+        <button
+          className="hero-glass-order-btn"
+          onClick={() => router.push('/menu')}
+        >
+          <CoffeeIcon size={18} /> Order Now →
+        </button>
+
         {/* Collapsible Color Picker Widget in bottom right corner */}
         <div className="hero-color-picker">
           <button
@@ -987,10 +1028,10 @@ export default function Home() {
               The 30degree Turn
             </h3>
             <p style={{ fontSize: '1rem', lineHeight: '1.75', color: '#4A2E1C', marginBottom: '1.25rem' }}>
-              At The 30degree Turn, we believe life is full of quiet shifts—moments when everything changes, often in the most meaningful ways. That’s the spirit behind our name and everything we bake: a celebration of transformation, intention, and joy.
+              At The 30degree Turn, we believe life is full of quiet shifts, moments when everything changes, often in the most meaningful ways. That’s the spirit behind our name and everything we bake: a celebration of transformation, intention, and joy.
             </p>
             <p style={{ fontSize: '0.95rem', lineHeight: '1.7', color: '#6E5444', marginBottom: '1.75rem' }}>
-              Every product is made with care, creativity, and a commitment to excellence—offering a fresh turn toward flavor, joy, and everyday celebration.
+              Every product is made with care, creativity, and a commitment to excellence, offering a fresh turn toward flavor, joy, and everyday celebration.
             </p>
             <button className="btn-primary" style={{ padding: '0.8rem 1.8rem' }} onClick={() => router.push('/about')}>
               Read Our Full Story &rarr;
