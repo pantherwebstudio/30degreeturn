@@ -670,14 +670,6 @@ export default function Header({
             margin: 0.5rem 0;
           }
 
-          @media (max-width: 992px) {
-            .sb-header.sticky-bar .logo-box {
-              position: relative;
-              left: 0;
-              transform: none;
-            }
-          }
-
           @media (max-width: 768px) {
             .sb-header {
               padding: 0.65rem 1.25rem;
