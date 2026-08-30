@@ -149,8 +149,8 @@ export default function Header({
           }
 
           .logo-box img {
-            width: 52px;
-            height: 52px;
+            width: 66px;
+            height: 66px;
             object-fit: contain;
             transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
           }
@@ -284,8 +284,10 @@ export default function Header({
             padding: 0.45rem 1rem;
             border-radius: 999px;
             text-decoration: none;
-            transition: all 0.25s ease;
             position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transition: color 0.3s ease, transform 0.25s ease;
             background: transparent;
             border: none;
             cursor: pointer;
@@ -294,9 +296,35 @@ export default function Header({
             gap: 0.35rem;
           }
 
+          .sb-header.sticky-bar .sb-nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(152, 78, 49, 0.14);
+            border-radius: 999px;
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+
           .sb-header.sticky-bar .sb-nav-link:hover {
             color: #984e31;
-            background: rgba(152, 78, 49, 0.12);
+            transform: translateY(-1px);
+          }
+
+          .sb-header.sticky-bar .sb-nav-link:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+          }
+
+          .sb-header.sticky-bar .sb-nav-link.active {
+            background: #21100a;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(33, 16, 10, 0.2);
           }
 
           .sb-header.sticky-bar .sb-nav-link.active {
@@ -680,8 +708,8 @@ export default function Header({
             }
 
             .sb-header:not(.hero-overlay) .logo-box img {
-              width: 46px;
-              height: 46px;
+              width: 56px;
+              height: 56px;
             }
           }
         `}</style>
@@ -689,7 +717,6 @@ export default function Header({
         {/* Brand Mark (Left on Hero, Center after Hero) */}
         <div className="logo-box" onClick={() => router.push('/')}>
           <img src="/logo-30degreeturn.jpeg" alt="30° Turn Cafe Logo" />
-          {!heroOverlay && <span className="sb-brand-name">30° TURN CAFE</span>}
         </div>
 
         {/* Desktop Nav */}
@@ -755,123 +782,109 @@ export default function Header({
             </div>
           )}
 
-          {/* If Hero Overlay, show Profile Icon Dropdown */}
-          {heroOverlay ? (
-            <div className="profile-dropdown-container">
-              <button
-                className="profile-btn"
-                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                title="Profile & Account"
-              >
-                <UserIcon size={18} />
-              </button>
+          {/* Profile Icon / Badge with Dropdown Menu in ALL navbars */}
+          <div className="profile-dropdown-container">
+            <button
+              className="profile-btn"
+              onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+              title="Profile & Account"
+              style={!heroOverlay ? {
+                background: '#FAF3EC',
+                color: '#984e31',
+                border: '1px solid rgba(152, 78, 49, 0.25)',
+                width: 'auto',
+                padding: '0.4rem 0.85rem',
+                borderRadius: '999px',
+                gap: '0.4rem',
+                fontWeight: 700,
+                fontSize: '0.85rem'
+              } : undefined}
+            >
+              <UserIcon size={18} />
+              {!heroOverlay && (customer ? <span>Hi, {customer.name.split(' ')[0]}</span> : null)}
+            </button>
 
-              {isProfileDropdownOpen && (
-                <>
-                  <div className="dropdown-overlay" onClick={() => setIsProfileDropdownOpen(false)} />
-                  <div className="profile-dropdown-menu">
-                    {customer ? (
-                      <div className="dropdown-header-info">
-                        <div className="dropdown-user-name">Hi, {customer.name}</div>
-                        <div className="dropdown-user-mobile">{customer.mobile}</div>
-                      </div>
-                    ) : (
-                      <div className="dropdown-header-info">
-                        <div className="dropdown-user-name">Welcome to 30° Turn</div>
-                        <div className="dropdown-user-mobile">Guest User</div>
-                      </div>
-                    )}
+            {isProfileDropdownOpen && (
+              <>
+                <div className="dropdown-overlay" onClick={() => setIsProfileDropdownOpen(false)} />
+                <div className="profile-dropdown-menu">
+                  {customer ? (
+                    <div className="dropdown-header-info">
+                      <div className="dropdown-user-name">Hi, {customer.name}</div>
+                      <div className="dropdown-user-mobile">{customer.mobile}</div>
+                    </div>
+                  ) : (
+                    <div className="dropdown-header-info">
+                      <div className="dropdown-user-name">Welcome to 30° Turn</div>
+                      <div className="dropdown-user-mobile">Guest User</div>
+                    </div>
+                  )}
 
-                    {onLocationClick && (
-                      <button
-                        className="dropdown-item-btn"
-                        onClick={() => {
-                          setIsProfileDropdownOpen(false);
-                          onLocationClick();
-                        }}
-                        style={{
-                          color: locationState?.orderType === 'delivery' && locationState?.isServiceable ? '#2e7d32' : '#984e31'
-                        }}
-                      >
-                        <TargetIcon size={16} />
-                        {locationState?.orderType === 'delivery' ? (
-                          locationState?.isServiceable ? (
-                            `Delivery (${locationState.distanceKm?.toFixed(1)}km)`
-                          ) : (
-                            'Not Serviceable (>2km)'
-                          )
-                        ) : (
-                          'Dine-In / Pickup Mode'
-                        )}
-                      </button>
-                    )}
-
+                  {onLocationClick && (
                     <button
                       className="dropdown-item-btn"
                       onClick={() => {
                         setIsProfileDropdownOpen(false);
-                        handleTrackOrders();
+                        onLocationClick();
+                      }}
+                      style={{
+                        color: locationState?.orderType === 'delivery' && locationState?.isServiceable ? '#2e7d32' : '#D2B48C'
                       }}
                     >
-                      <SearchIcon size={16} />
-                      Track My Orders
+                      <TargetIcon size={16} />
+                      {locationState?.orderType === 'delivery' ? (
+                        locationState?.isServiceable ? (
+                          `Delivery (${locationState.distanceKm?.toFixed(1)}km)`
+                        ) : (
+                          'Not Serviceable (>2km)'
+                        )
+                      ) : (
+                        'Dine-In / Pickup Mode'
+                      )}
                     </button>
+                  )}
 
-                    <div style={{ height: '1px', background: 'rgba(152, 78, 49, 0.15)', margin: '0.4rem 0' }} />
+                  <button
+                    className="dropdown-item-btn"
+                    onClick={() => {
+                      setIsProfileDropdownOpen(false);
+                      handleTrackOrders();
+                    }}
+                  >
+                    <SearchIcon size={16} />
+                    Track My Orders
+                  </button>
 
-                    {customer ? (
-                      <button
-                        className="dropdown-item-btn logout"
-                        onClick={() => {
-                          setIsProfileDropdownOpen(false);
-                          handleLogout();
-                        }}
-                      >
-                        <LogOutIcon size={16} />
-                        Sign Out
-                      </button>
-                    ) : (
-                      <button
-                        className="dropdown-item-btn"
-                        style={{ color: '#984e31' }}
-                        onClick={() => {
-                          setIsProfileDropdownOpen(false);
-                          handleLoginClick();
-                        }}
-                      >
-                        <LogInIcon size={16} />
-                        Customer Sign In
-                      </button>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-          ) : (
-            /* If Non-Hero Sticky Header, render Customer greeting text / Logout icon button as shown in user screenshot */
-            customer ? (
-              <div className="user-greeting">
-                <span className="greeting-icon"><UserIcon size={15} /></span>
-                <span>Hi, {customer.name.split(' ')[0]}</span>
-                <button
-                  className="icon-btn logout"
-                  onClick={handleLogout}
-                  title="Sign Out"
-                >
-                  <LogOutIcon size={14} />
-                </button>
-              </div>
-            ) : (
-              <button
-                className="profile-btn"
-                onClick={handleLoginClick}
-                title="Customer Sign In"
-                style={{ background: '#FAF3EC', color: '#984e31', border: '1px solid rgba(152, 78, 49, 0.25)' }}
-              >
-                <LogInIcon size={16} />
-              </button>
-            )
-          )}
+                  <div style={{ height: '1px', background: 'rgba(250, 243, 236, 0.15)', margin: '0.4rem 0' }} />
+
+                  {customer ? (
+                    <button
+                      className="dropdown-item-btn logout"
+                      onClick={() => {
+                        setIsProfileDropdownOpen(false);
+                        handleLogout();
+                      }}
+                    >
+                      <LogOutIcon size={16} />
+                      Sign Out
+                    </button>
+                  ) : (
+                    <button
+                      className="dropdown-item-btn"
+                      style={{ color: '#D2B48C' }}
+                      onClick={() => {
+                        setIsProfileDropdownOpen(false);
+                        handleLoginClick();
+                      }}
+                    >
+                      <LogInIcon size={16} />
+                      Customer Sign In
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
 
           <button className="hamburger-btn" onClick={() => setIsMobileMenuOpen(true)}>
             <MenuIcon size={24} />

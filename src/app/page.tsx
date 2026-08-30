@@ -13,7 +13,11 @@ import {
   CakeIcon,
   SnowflakeIcon,
   HeartCupIcon,
-  PaletteIcon
+  PaletteIcon,
+  HotCoffeeIcon,
+  ColdCoffeeIcon,
+  PizzaSandwichIcon,
+  WafflePastaIcon
 } from '@/app/components/Icons';
 
 const DESKTOP_VIDEO_URL = "/cup-desktop.gif";
@@ -27,6 +31,18 @@ export default function Home() {
   const [heroBgColor, setHeroBgColor] = useState('#cbab80');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hero = document.getElementById('cinema-hero');
+      const currentScroll = window.scrollY;
+      if (hero && currentScroll >= hero.offsetHeight - 120) {
+        setIsPastHero(true);
+      } else if (currentScroll > 300) {
+        setIsPastHero(true);
+      }
+    }
+  }, []);
 
   // Location Serviceability & Order Type state (2km radius limit)
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -537,6 +553,37 @@ export default function Home() {
           font-weight: 500;
         }
 
+        .mobile-scroll-hint {
+          display: none;
+        }
+
+        @media (max-width: 768px) {
+          .mobile-scroll-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #984e31;
+            background: rgba(152, 78, 49, 0.08);
+            border: 1px solid rgba(152, 78, 49, 0.18);
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            margin-top: 0.75rem;
+            letter-spacing: 0.02em;
+          }
+
+          .scroll-arrow-anim {
+            display: inline-block;
+            animation: swipeRight 1.4s ease-in-out infinite;
+          }
+
+          @keyframes swipeRight {
+            0%, 100% { transform: translateX(0); opacity: 0.6; }
+            50% { transform: translateX(5px); opacity: 1; }
+          }
+        }
+
         .curations-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
@@ -963,42 +1010,46 @@ export default function Home() {
             <span className="curations-divider-line"></span>
           </div>
           <p className="curations-subtitle">Carefully crafted. Perfectly poured.</p>
+          <div className="mobile-scroll-hint">
+            <span>Swipe to explore curations</span>
+            <span className="scroll-arrow-anim">➔</span>
+          </div>
         </div>
 
         <div className="curations-grid">
-          <div className="curation-card" onClick={() => router.push('/menu?category=all')}>
+          <div className="curation-card" onClick={() => router.push('/menu?category=hot-coffee')}>
             <div className="curation-card-icon">
-              <HeartCupIcon size={28} />
+              <HotCoffeeIcon size={28} />
             </div>
-            <h4 className="curation-card-title">All Curations</h4>
-            <p className="curation-card-desc">Explore our complete collection</p>
+            <h4 className="curation-card-title">Hot Coffees</h4>
+            <p className="curation-card-desc">Expressive roasts, hand-poured & brewed fresh</p>
             <span className="curation-card-link">Explore &rarr;</span>
           </div>
 
-          <div className="curation-card" onClick={() => router.push('/menu?category=coffee')}>
+          <div className="curation-card" onClick={() => router.push('/menu?category=iced-coffee')}>
             <div className="curation-card-icon">
-              <SnowflakeIcon size={26} />
+              <ColdCoffeeIcon size={26} />
             </div>
-            <h4 className="curation-card-title">Cold Brews</h4>
-            <p className="curation-card-desc">Chilled to perfection, crafted to refresh</p>
+            <h4 className="curation-card-title">Cold Brews & Shakes</h4>
+            <p className="curation-card-desc">Chilled to perfection, smooth & refreshing</p>
             <span className="curation-card-link">Discover &rarr;</span>
           </div>
 
-          <div className="curation-card" onClick={() => router.push('/menu?category=specialty')}>
+          <div className="curation-card" onClick={() => router.push('/menu?category=sandwich-pizza')}>
             <div className="curation-card-icon">
-              <LeafIcon size={26} />
+              <PizzaSandwichIcon size={26} />
             </div>
-            <h4 className="curation-card-title">Matcha Series</h4>
-            <p className="curation-card-desc">Pure, vibrant, and naturally energizing</p>
+            <h4 className="curation-card-title">Sandwiches & Pizza</h4>
+            <p className="curation-card-desc">Freshly toasted, loaded with gourmet toppings</p>
             <span className="curation-card-link">Explore &rarr;</span>
           </div>
 
-          <div className="curation-card" onClick={() => router.push('/menu?category=pastry')}>
+          <div className="curation-card" onClick={() => router.push('/menu?category=pasta-pancakes-waffles')}>
             <div className="curation-card-icon">
-              <CoffeeIcon size={26} />
+              <WafflePastaIcon size={26} />
             </div>
-            <h4 className="curation-card-title">Signature Lattes</h4>
-            <p className="curation-card-desc">Classic comfort, perfectly balanced</p>
+            <h4 className="curation-card-title">Pasta & Sweet Treats</h4>
+            <p className="curation-card-desc">Creamy Penne, Nutella Pancakes & Waffles</p>
             <span className="curation-card-link">Explore &rarr;</span>
           </div>
         </div>

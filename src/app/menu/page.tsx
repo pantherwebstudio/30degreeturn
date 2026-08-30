@@ -542,6 +542,13 @@ function MenuContent() {
           display: flex;
           flex-direction: column;
           background-color: var(--bg-white);
+          padding-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+          .starbucks-layout {
+            padding-top: 68px;
+          }
         }
 
         /* Ribbon */
@@ -979,6 +986,38 @@ function MenuContent() {
           font-size: 1.4rem;
           position: relative;
           transition: var(--transition-fast);
+        }
+
+        .mobile-scroll-hint {
+          display: none;
+        }
+
+        @media (max-width: 768px) {
+          .mobile-scroll-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #984e31;
+            background: rgba(152, 78, 49, 0.08);
+            border: 1px solid rgba(152, 78, 49, 0.18);
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.02em;
+          }
+
+          .scroll-arrow-anim {
+            display: inline-block;
+            animation: swipeRight 1.4s ease-in-out infinite;
+          }
+
+          @keyframes swipeRight {
+            0%, 100% { transform: translateX(0); opacity: 0.6; }
+            50% { transform: translateX(5px); opacity: 1; }
+          }
         }
 
         .sb-cart-btn:hover {
@@ -1470,6 +1509,10 @@ function MenuContent() {
           <p style={{ fontSize: '0.9rem', color: '#6E5444', margin: 0 }}>
             Hand-brewed specialty drinks, fresh smoothies, and gourmet warm bites prepared fresh.
           </p>
+          <div className="mobile-scroll-hint">
+            <span>Swipe categories left & right</span>
+            <span className="scroll-arrow-anim">➔</span>
+          </div>
         </div>
 
         {/* Professional Scrollable Category Filter Bar with Custom SVG Icons */}

@@ -25,6 +25,13 @@ export default function AboutPage() {
           background: #FAF6F0;
           color: #21100a;
           font-family: var(--font-sans);
+          padding-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+          .about-wrapper {
+            padding-top: 68px;
+          }
         }
 
         /* Hero Section */
