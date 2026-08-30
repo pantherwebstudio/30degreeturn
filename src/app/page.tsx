@@ -17,7 +17,7 @@ import {
 } from '@/app/components/Icons';
 
 const DESKTOP_VIDEO_URL = "/cup-desktop.gif";
-const MOBILE_VIDEO_URL = "/cup.gif";
+const MOBILE_VIDEO_URL = "/cup-mobile.gif";
 
 export default function Home() {
   const router = useRouter();
@@ -746,8 +746,14 @@ export default function Home() {
             margin-bottom: 1.5rem;
           }
 
-          .world-coffee-section {
-            padding: 2rem 4%;
+          .our-story-section {
+            padding: 3rem 1.25rem !important;
+          }
+
+          .our-story-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+            text-align: center !important;
           }
 
           .article-banner {
@@ -971,8 +977,8 @@ export default function Home() {
       </section>
 
       {/* Our Story Feature Section */}
-      <section style={{ padding: '4.5rem 6%', backgroundColor: '#FAF3EC', borderTop: '1px solid rgba(152, 78, 49, 0.15)' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3.5rem', alignItems: 'center' }}>
+      <section className="our-story-section" style={{ padding: '4.5rem 6%', backgroundColor: '#FAF3EC', borderTop: '1px solid rgba(152, 78, 49, 0.15)' }}>
+        <div className="our-story-grid" style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3.5rem', alignItems: 'center' }}>
           <div>
             <span style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '1.5px', color: '#984e31', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>
               Our Story & Philosophy
