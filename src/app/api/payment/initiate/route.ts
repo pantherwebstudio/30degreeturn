@@ -1,84 +1,85 @@
-﻿import { NextResponse } from 'next/server';
-import { createOrder } from '@/lib/db';
+import { NextResponse } from 'next/server';
+import crypto from 'crypto';
 
 /**
  * POST /api/payment/initiate
- * Creates a Cashfree order and returns the payment_session_id for the frontend SDK.
- *
- * Env vars:
- *   CASHFREE_APP_ID     — Your Cashfree App ID
- *   CASHFREE_SECRET_KEY — Your Cashfree Secret Key
- *   CASHFREE_ENV        — "sandbox" | "production"
- *   NEXT_PUBLIC_APP_URL — Your public app base URL
+ * Initiates a PhonePe Payment Gateway checkout transaction using standard V1 Pay Page API.
  */
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
-    const { customerName, customerMobile, totalAmount, items } = body;
+    const { customerName, customerMobile, totalAmount, items, orderType } = body;
 
     if (!customerName || !customerMobile || typeof totalAmount !== 'number' || !items?.length) {
       return NextResponse.json({ error: 'Missing required order fields.' }, { status: 400 });
     }
 
-    const appId     = process.env.CASHFREE_APP_ID     || '';
-    const secretKey = process.env.CASHFREE_SECRET_KEY || '';
-    const env       = process.env.CASHFREE_ENV        || 'sandbox';
-    const appUrl    = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const merchantId = process.env.PHONEPE_MERCHANT_ID || 'PGTESTPAYUAT';
+    const saltKey = process.env.PHONEPE_SALT_KEY || '099eb0cd-02cf-4e2a-8aca-3e6c6aff0399';
+    const saltIndex = process.env.PHONEPE_SALT_INDEX || '1';
+    const hostUrl = process.env.PHONEPE_HOST_URL || 'https://api-preprod.phonepe.com/apis/pg-sandbox';
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
-    const baseUrl = env === 'production'
-      ? 'https://api.cashfree.com/pg/orders'
-      : 'https://sandbox.cashfree.com/pg/orders';
+    // Unique transaction ID (max 38 chars, alphanumeric)
+    const merchantTransactionId = `TXN_${Date.now()}_${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
 
-    // Unique order ID
-    const orderId = `ORD_${Date.now()}_${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+    // Store order payload in memory / session storage / pending order metadata
+    const returnUrl = `${appUrl}/api/payment/verify?txnId=${merchantTransactionId}`;
+    const callbackUrl = `${appUrl}/api/payment/callback`;
 
-    const returnUrl = `${appUrl}/api/payment/verify?order_id={order_id}&cf_order_id={order_id}`;
+    // Amount must be in Paise (e.g. ₹100 = 10000 paise)
+    const amountInPaise = Math.round(totalAmount * 100);
 
-    // Create order on Cashfree
-    const cfRes = await fetch(baseUrl, {
+    const payload = {
+      merchantId,
+      merchantTransactionId,
+      merchantUserId: `CUST_${customerMobile.replace(/\D/g, '')}`,
+      amount: amountInPaise,
+      redirectUrl: returnUrl,
+      redirectMode: 'REDIRECT',
+      callbackUrl,
+      mobileNumber: customerMobile.replace(/\D/g, '').slice(-10),
+      paymentInstrument: {
+        type: 'PAY_PAGE',
+      },
+    };
+
+    // 1. Base64 encode payload
+    const base64Payload = Buffer.from(JSON.stringify(payload)).toString('base64');
+
+    // 2. Compute X-VERIFY checksum: SHA256(base64Payload + "/pg/v1/pay" + saltKey) + "###" + saltIndex
+    const endpoint = '/pg/v1/pay';
+    const stringToHash = base64Payload + endpoint + saltKey;
+    const sha256 = crypto.createHash('sha256').update(stringToHash).digest('hex');
+    const xVerify = `${sha256}###${saltIndex}`;
+
+    // 3. Send POST request to PhonePe API
+    const response = await fetch(`${hostUrl}${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-client-id': appId,
-        'x-client-secret': secretKey,
-        'x-api-version': '2023-08-01',
+        'X-VERIFY': xVerify,
       },
-      body: JSON.stringify({
-        order_id: orderId,
-        order_amount: parseFloat(totalAmount.toFixed(2)),
-        order_currency: 'INR',
-        customer_details: {
-          customer_id: customerMobile.replace(/\D/g, ''),
-          customer_name: customerName,
-          customer_phone: customerMobile.replace(/\D/g, ''),
-          customer_email: `${customerMobile.replace(/\D/g, '')}@30degreeturn.in`,
-        },
-        order_meta: {
-          return_url: returnUrl,
-          notify_url: `${appUrl}/api/payment/webhook`,
-        },
-        order_note: items.map((i: any) => `${i.quantity}x ${i.name}`).join(', ').slice(0, 200),
-      }),
+      body: JSON.stringify({ request: base64Payload }),
     });
 
-    const cfData = await cfRes.json();
+    const responseData = await response.json();
 
-    if (!cfRes.ok) {
-      console.error('Cashfree create order error:', cfData);
+    if (responseData.success && responseData.data?.instrumentResponse?.redirectInfo?.url) {
+      return NextResponse.json({
+        success: true,
+        redirectUrl: responseData.data.instrumentResponse.redirectInfo.url,
+        transactionId: merchantTransactionId,
+      });
+    } else {
+      console.error('PhonePe Pay API Error:', responseData);
       return NextResponse.json(
-        { error: cfData?.message || 'Failed to create Cashfree order.' },
-        { status: 500 }
+        { error: responseData.message || 'PhonePe payment initiation failed.' },
+        { status: 400 }
       );
     }
-
-    return NextResponse.json({
-      success: true,
-      paymentSessionId: cfData.payment_session_id,
-      orderId: cfData.order_id,
-      cfEnv: env,
-    });
   } catch (error: any) {
-    console.error('Cashfree initiate error:', error);
-    return NextResponse.json({ error: 'Failed to initiate payment.' }, { status: 500 });
+    console.error('PhonePe initiate error:', error);
+    return NextResponse.json({ error: 'Failed to initiate PhonePe payment.' }, { status: 500 });
   }
 }

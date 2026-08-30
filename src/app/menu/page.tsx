@@ -485,7 +485,7 @@ function MenuContent() {
         items: orderItems
       }));
 
-      // Call server to create Cashfree order → get payment_session_id
+      // Call server to initiate PhonePe Payment Gateway transaction
       const res = await fetch('/api/payment/initiate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -493,31 +493,20 @@ function MenuContent() {
           customerName: activeName,
           customerMobile: activeMobile,
           totalAmount: parseFloat(cartTotal.toFixed(2)),
-          items: orderItems
+          items: orderItems,
+          orderType
         })
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Payment initiation failed.');
+      if (!res.ok) throw new Error(data.error || 'PhonePe payment initiation failed.');
 
-      const { paymentSessionId, cfEnv } = data;
-
-      // Dynamically load Cashfree JS SDK and open checkout
-      await new Promise<void>((resolve, reject) => {
-        if ((window as any).Cashfree) { resolve(); return; }
-        const script = document.createElement('script');
-        script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error('Failed to load Cashfree SDK.'));
-        document.head.appendChild(script);
-      });
-
-      const cashfree = (window as any).Cashfree({ mode: cfEnv === 'production' ? 'production' : 'sandbox' });
-
-      cashfree.checkout({
-        paymentSessionId,
-        redirectTarget: '_self',
-      });
+      if (data.redirectUrl) {
+        // Redirect customer directly to PhonePe Payment Gateway
+        window.location.href = data.redirectUrl;
+      } else {
+        throw new Error('No checkout URL returned from PhonePe.');
+      }
 
     } catch (err: any) {
       setSubmitError(err.message || 'Payment error. Please try again.');
