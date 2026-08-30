@@ -10,11 +10,12 @@ import {
   CloseIcon,
   LogOutIcon,
   LogInIcon,
-  CoffeeIcon
+  CoffeeIcon,
+  SparklesIcon
 } from '@/app/components/Icons';
 
 interface HeaderProps {
-  activePage: 'home' | 'menu';
+  activePage: 'home' | 'menu' | 'about';
   customer: { name: string; mobile: string } | null;
   cartCount: number;
   heroOverlay?: boolean;
@@ -648,6 +649,7 @@ export default function Header({
           <ul className="sb-nav">
             <li><a href="/" className={`sb-nav-link ${activePage === 'home' ? 'active' : ''}`}>Home</a></li>
             <li><a href="/menu" className={`sb-nav-link ${activePage === 'menu' ? 'active' : ''}`}>Order</a></li>
+            <li><a href="/about" className={`sb-nav-link ${activePage === 'about' ? 'active' : ''}`}>Our Story</a></li>
             <li>
               <button className="sb-nav-link" onClick={handleTrackOrders}>
                 Track Orders
@@ -727,6 +729,10 @@ export default function Header({
               <a href="/menu" className={`mobile-menu-item ${activePage === 'menu' ? 'active' : ''}`}>
                 <span className="mobile-menu-item-icon"><CartIcon size={18} /></span>
                 Order
+              </a>
+              <a href="/about" className={`mobile-menu-item ${activePage === 'about' ? 'active' : ''}`}>
+                <span className="mobile-menu-item-icon"><SparklesIcon size={18} /></span>
+                Our Story
               </a>
               <button className="mobile-menu-item" onClick={handleTrackOrders}>
                 <span className="mobile-menu-item-icon"><SearchIcon size={18} /></span>

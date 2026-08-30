@@ -523,7 +523,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <header className="admin-header">
         <div className="admin-title-box">
-          <img src="/30degree%20turn.png" alt="30° Turn Cafe Logo" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--primary)', marginRight: '8px' }} />
+          <img src="/logo.png" alt="30° Turn Cafe Logo" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--primary)', marginRight: '8px' }} />
           <h1 className="logo-text" style={{ fontSize: '1.25rem' }}>30° TURN CAFE</h1>
           <span className="admin-badge">Dashboard</span>
         </div>

@@ -17,7 +17,22 @@ import {
   LeafIcon,
   CakeIcon,
   SnowflakeIcon,
-  HeartCupIcon
+  HeartCupIcon,
+  HotCoffeeIcon,
+  FlavourCoffeeIcon,
+  TeaLeafIcon,
+  ColdCoffeeIcon,
+  FrappeIcon,
+  BubbleTeaIcon,
+  HotChocolateIcon,
+  MilkshakeIcon,
+  CocktailsIcon,
+  JuiceIcon,
+  OmeletteIcon,
+  StartersIcon,
+  PizzaSandwichIcon,
+  QuesadillaIcon,
+  WafflePastaIcon
 } from '@/app/components/Icons';
 
 interface MenuItem {
@@ -25,10 +40,25 @@ interface MenuItem {
   name: string;
   price: number;
   description: string;
-  calories: string;
-  size: string;
-  category: 'coffee' | 'specialty' | 'pastry';
+  category: 
+    | 'hot-coffee'
+    | 'flavour-hot-coffee'
+    | 'leaf-tea'
+    | 'iced-coffee'
+    | 'blended-cold-coffee'
+    | 'bubble-tea'
+    | 'hot-chocolate'
+    | 'milkshake'
+    | 'mocktails'
+    | 'juice-smoothies'
+    | 'kulfi-omelette'
+    | 'sliders-starters'
+    | 'sandwich-pizza'
+    | 'quesadilla'
+    | 'pasta-pancakes-waffles';
+  subCategory: string;
   image: string;
+  isVeg?: boolean;
 }
 
 interface CartItem {
@@ -53,106 +83,124 @@ interface Order {
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  {
-    id: 'c1',
-    name: 'Vietnamese Cold Brew',
-    price: 149,
-    description: 'Slow-brewed cold coffee with sweet condensed milk, served over ice.',
-    calories: '280 kcal',
-    size: 'Tall (354 ml)',
-    category: 'coffee',
-    image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=200&h=200'
-  },
-  {
-    id: 'c2',
-    name: 'Iced Shaken Espresso',
-    price: 169,
-    description: 'Double espresso shaken with ice, vanilla syrup, and finished with a splash of oat milk.',
-    calories: '180 kcal',
-    size: 'Tall (354 ml)',
-    category: 'coffee',
-    image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=200&h=200'
-  },
-  {
-    id: 'c3',
-    name: 'Cold Coffee Latte',
-    price: 139,
-    description: 'Rich, full-bodied espresso combined with cold milk and poured over ice.',
-    calories: '190 kcal',
-    size: 'Grande (473 ml)',
-    category: 'coffee',
-    image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=200&h=200'
-  },
-  {
-    id: 'c4',
-    name: 'Nitro Cold Brew',
-    price: 179,
-    description: 'Our signature slow-steeped cold brew infused with nitrogen for a sweet, velvety head.',
-    calories: '5 kcal',
-    size: 'Grande (473 ml)',
-    category: 'coffee',
-    image: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&q=80&w=200&h=200'
-  },
-  {
-    id: 's1',
-    name: 'Matcha Latte',
-    price: 189,
-    description: 'Pure Japanese Uji matcha whisked to order, served with steamed oat milk.',
-    calories: '210 kcal',
-    size: 'Grande (473 ml)',
-    category: 'specialty',
-    image: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&q=80&w=200&h=200'
-  },
-  {
-    id: 's2',
-    name: 'Chocolate Mocha',
-    price: 199,
-    description: 'Espresso mixed with bittersweet cocoa syrup, steamed milk, and dark chocolate flakes.',
-    calories: '390 kcal',
-    size: 'Grande (473 ml)',
-    category: 'specialty',
-    image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=200&h=200'
-  },
-  {
-    id: 's3',
-    name: 'Lavender Iced Tea',
-    price: 129,
-    description: 'Refreshing iced black tea infused with notes of rosemary, lavender flower, and honey.',
-    calories: '120 kcal',
-    size: 'Grande (473 ml)',
-    category: 'specialty',
-    image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=200&h=200'
-  },
-  {
-    id: 'p1',
-    name: 'Butter Croissant',
-    price: 99,
-    description: 'Warm, flaky, golden croissant made with real French butter.',
-    calories: '310 kcal',
-    size: '1 Piece',
-    category: 'pastry',
-    image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&q=80&w=200&h=200'
-  },
-  {
-    id: 'p2',
-    name: 'Almond Croissant',
-    price: 129,
-    description: 'Freshly baked croissant stuffed with premium sweet almond paste and topped with almond slices.',
-    calories: '420 kcal',
-    size: '1 Piece',
-    category: 'pastry',
-    image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=200&h=200'
-  },
-  {
-    id: 'p3',
-    name: 'Chocolate Fudge Cookie',
-    price: 79,
-    description: 'Rich, soft chocolate fudge cookie baked with double chocolate chips and sea salt.',
-    calories: '290 kcal',
-    size: '1 Piece',
-    category: 'pastry',
-    image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&q=80&w=200&h=200'
-  }
+  // --- HOT COFFEE ---
+  { id: 'hc1', name: 'Espresso (Single)', price: 39, description: 'Freshly brewed single shot of espresso', category: 'hot-coffee', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'hc2', name: 'Espresso (Double)', price: 49, description: 'Freshly brewed double shot of espresso', category: 'hot-coffee', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'hc3', name: 'Americano', price: 49, description: 'Freshly brewed double shot of espresso stretched with hot water', category: 'hot-coffee', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'hc4', name: 'Cappuccino', price: 90, description: 'Freshly brewed espresso with milk froth & steamed milk', category: 'hot-coffee', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'hc5', name: 'Caffe Latte', price: 99, description: 'Freshly brewed espresso & steamed milk', category: 'hot-coffee', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'hc6', name: 'Cafe Mocha', price: 119, description: 'Single shot espresso with milk froth and chocolate truffle', category: 'hot-coffee', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- FLAVOUR HOT COFFEE ---
+  { id: 'fhc1', name: 'Filter Coffee', price: 40, description: 'Traditional espresso & steamed milk blend', category: 'flavour-hot-coffee', subCategory: 'Flavour Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'fhc2', name: 'Biscoff Latte', price: 119, description: 'Biscoff paste with single shot espresso and milk', category: 'flavour-hot-coffee', subCategory: 'Flavour Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'fhc3', name: 'White Mocha', price: 119, description: 'Milk chocolate truffle, steamed milk & single shot espresso', category: 'flavour-hot-coffee', subCategory: 'Flavour Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'fhc4', name: 'Spanish Cappuccino', price: 119, description: 'Milkmaid, single shot espresso, milk froth', category: 'flavour-hot-coffee', subCategory: 'Flavour Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'fhc5', name: 'Nutella Latte', price: 119, description: 'Nutella spread, single shot espresso, steamed milk', category: 'flavour-hot-coffee', subCategory: 'Flavour Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'fhc6', name: 'Cinnamon Latte', price: 119, description: 'Single shot espresso, steamed milk, cinnamon', category: 'flavour-hot-coffee', subCategory: 'Flavour Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'fhc7', name: 'Hazelnut Cappuccino', price: 119, description: 'Single shot espresso, steamed milk, hazelnut', category: 'flavour-hot-coffee', subCategory: 'Flavour Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- LEAF TEA ---
+  { id: 'lt1', name: 'Dum Tea', price: 20, description: 'Classic aromatic spiced dum tea', category: 'leaf-tea', subCategory: 'Leaf Tea', isVeg: true, image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'lt2', name: 'Masala Tea', price: 30, description: 'Indian masala spiced brewed tea', category: 'leaf-tea', subCategory: 'Leaf Tea', isVeg: true, image: 'https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'lt3', name: 'Black Tea', price: 30, description: 'Pure, strong black leaf tea', category: 'leaf-tea', subCategory: 'Leaf Tea', isVeg: true, image: 'https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'lt4', name: 'Green Tea', price: 30, description: 'Organic healthy green leaf tea', category: 'leaf-tea', subCategory: 'Leaf Tea', isVeg: true, image: 'https://images.unsplash.com/photo-1627435601361-ec25f5b1d0e5?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'lt5', name: 'Lemon Honey Ginger Green Tea', price: 40, description: 'Infused green tea with lemon, honey, and fresh ginger', category: 'leaf-tea', subCategory: 'Leaf Tea', isVeg: true, image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- ICED COFFEE ---
+  { id: 'ic1', name: 'Iced Americano', price: 79, description: 'Double shot espresso, water, ice', category: 'iced-coffee', subCategory: 'Iced Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ic2', name: 'Iced Cappuccino', price: 99, description: 'Ice cubes, milk foam, double shot espresso', category: 'iced-coffee', subCategory: 'Iced Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ic3', name: 'Cranberry Coffee', price: 109, description: 'Single shot espresso, cranberry juice, ice', category: 'iced-coffee', subCategory: 'Iced Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ic4', name: 'Vietnamese Coffee', price: 109, description: 'Double shot espresso, sweet condensed milk over ice', category: 'iced-coffee', subCategory: 'Iced Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ic5', name: 'Iced Mocha', price: 119, description: 'Espresso, cold milk, chocolate truffle over ice', category: 'iced-coffee', subCategory: 'Iced Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- BLENDED COLD COFFEE ---
+  { id: 'bc1', name: 'Cafe Frappe', price: 139, description: 'Vanilla ice cream, milk, filter deduction', category: 'blended-cold-coffee', subCategory: 'Blended Cold Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'bc2', name: 'Biscoff Toffee Cream', price: 149, description: 'Vanilla ice cream, Biscoff paste, milk, filter deduction, Biscoff biscuits', category: 'blended-cold-coffee', subCategory: 'Blended Cold Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'bc3', name: 'Devils Own', price: 149, description: 'Vanilla ice cream, milk, filter deduction, chocolate sauce, whipped cream', category: 'blended-cold-coffee', subCategory: 'Blended Cold Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'bc4', name: 'Crunchy Oreo Frappe', price: 149, description: 'Oreo biscuits, filter deduction, chocolate truffle, milk, vanilla ice cream', category: 'blended-cold-coffee', subCategory: 'Blended Cold Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'bc5', name: 'Nutella Frappe', price: 149, description: 'Vanilla ice cream, milk, Nutella sauce, filter deduction', category: 'blended-cold-coffee', subCategory: 'Blended Cold Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- BUBBLE TEA ---
+  { id: 'bt1', name: 'Mango Bubble Tea', price: 99, description: 'Mango crush, black tea base, sugar syrup, boba, ice', category: 'bubble-tea', subCategory: 'Bubble Tea', isVeg: true, image: 'https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'bt2', name: 'Peach Bubble Tea', price: 99, description: 'Peach crush, black tea base, sugar syrup, boba, ice', category: 'bubble-tea', subCategory: 'Bubble Tea', isVeg: true, image: 'https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'bt3', name: 'Strawberry Bubble Tea', price: 99, description: 'Strawberry crush, black tea base, sugar syrup, boba, ice', category: 'bubble-tea', subCategory: 'Bubble Tea', isVeg: true, image: 'https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'bt4', name: 'Orange Bubble Tea', price: 99, description: 'Orange crush, black tea base, sugar syrup, orange wedge, boba, ice', category: 'bubble-tea', subCategory: 'Bubble Tea', isVeg: true, image: 'https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- HOT CHOCOLATE ---
+  { id: 'hch1', name: 'Classic Hot Chocolate', price: 79, description: 'Dark chocolate 70% combined with milk froth', category: 'hot-chocolate', subCategory: 'Hot Chocolate', isVeg: true, image: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'hch2', name: 'French Hot Chocolate', price: 89, description: 'Dark chocolate 70%, pinch of cinnamon with milk froth', category: 'hot-chocolate', subCategory: 'Hot Chocolate', isVeg: true, image: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'hch3', name: 'Marshmallow Hot Chocolate', price: 89, description: 'Dark chocolate 70% hot chocolate served with marshmallows & milk froth', category: 'hot-chocolate', subCategory: 'Hot Chocolate', isVeg: true, image: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- MILKSHAKE ---
+  { id: 'ms1', name: 'Vanilla Milkshake', price: 109, description: 'Vanilla ice cream, fresh cream, milk', category: 'milkshake', subCategory: 'Milkshake', isVeg: true, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ms2', name: 'Chocolate Milkshake', price: 119, description: 'Chocolate ice cream, fresh cream, milk, chocolate truffle', category: 'milkshake', subCategory: 'Milkshake', isVeg: true, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ms3', name: 'Pina Colada Milkshake', price: 119, description: 'Vanilla ice cream, pineapple, coconut milk, fresh cream, coconut', category: 'milkshake', subCategory: 'Milkshake', isVeg: true, image: 'https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ms4', name: 'Lotus Berry Biscoff Milkshake', price: 129, description: 'Vanilla ice cream, Biscoff paste, milk, top Biscoff and whip cream', category: 'milkshake', subCategory: 'Milkshake', isVeg: true, image: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ms5', name: 'Crunchy Oreo Milkshake', price: 129, description: 'Vanilla ice cream, milk, Oreo biscuits', category: 'milkshake', subCategory: 'Milkshake', isVeg: true, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ms6', name: 'Ferrero Rocher Milkshake', price: 139, description: 'Vanilla ice cream, Ferrero Rocher, milk', category: 'milkshake', subCategory: 'Milkshake', isVeg: true, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- MOCKTAILS ---
+  { id: 'm1', name: 'Virgin Mojito', price: 89, description: 'Mint leaves, mojito mint, ice, soda', category: 'mocktails', subCategory: 'Mocktails', isVeg: true, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'm2', name: 'Strawberry Mojito', price: 99, description: 'Strawberry crush, mint leaves, soda', category: 'mocktails', subCategory: 'Mocktails', isVeg: true, image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'm3', name: 'Hibiscus Watermelon', price: 99, description: 'Hibiscus, watermelon, lemon, mint leaves, ice, soda', category: 'mocktails', subCategory: 'Mocktails', isVeg: true, image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'm4', name: 'Spicy Aam Panna Mojito', price: 99, description: 'Aam panna syrup, 7Up, lemon, mint, ice, green chilli, black salt, jeera', category: 'mocktails', subCategory: 'Mocktails', isVeg: true, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'm5', name: 'Forest Berry', price: 109, description: 'Blueberry & strawberry, soda, ice', category: 'mocktails', subCategory: 'Mocktails', isVeg: true, image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- FRESH JUICE & SMOOTHIES ---
+  { id: 'fj1', name: 'Watermelon Juice', price: 50, description: 'Freshly pressed organic watermelon juice', category: 'juice-smoothies', subCategory: 'Fresh Juices', isVeg: true, image: 'https://images.unsplash.com/photo-1589733955941-5eeaf75449d1?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'fj2', name: 'Pineapple Juice', price: 50, description: 'Freshly pressed sweet pineapple juice', category: 'juice-smoothies', subCategory: 'Fresh Juices', isVeg: true, image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'fj3', name: 'ABC Juice', price: 99, description: 'Fresh Apple, Beetroot & Carrot organic juice', category: 'juice-smoothies', subCategory: 'Fresh Juices', isVeg: true, image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sm1', name: 'Yogurt Banana Smoothie', price: 119, description: 'Creamy yogurt blended with fresh banana', category: 'juice-smoothies', subCategory: 'Smoothies', isVeg: true, image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sm2', name: 'Oats Smoothie', price: 119, description: 'Nutritious oats blended with milk and yogurt', category: 'juice-smoothies', subCategory: 'Smoothies', isVeg: true, image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sm3', name: 'Mango Smoothie', price: 119, description: 'Fresh mango pulp blended with rich yogurt', category: 'juice-smoothies', subCategory: 'Smoothies', isVeg: true, image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sm4', name: 'Strawberry Smoothie', price: 119, description: 'Real strawberries blended with cold yogurt', category: 'juice-smoothies', subCategory: 'Smoothies', isVeg: true, image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- KULFI & OMELETTES ---
+  { id: 'k1', name: 'Egg Kulfi', price: 50, description: 'Specialty egg kulfi treat', category: 'kulfi-omelette', subCategory: 'Kulfi', isVeg: false, image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'k2', name: 'Chicken Egg Kulfi', price: 70, description: 'Delicious chicken & egg kulfi snack', category: 'kulfi-omelette', subCategory: 'Kulfi', isVeg: false, image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'om1', name: 'Masala Omelette', price: 40, description: 'Spiced Indian masala double egg omelette', category: 'kulfi-omelette', subCategory: 'Omelette', isVeg: false, image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'om2', name: 'Cheese Omelette', price: 50, description: 'Fluffy egg omelette loaded with melted cheese', category: 'kulfi-omelette', subCategory: 'Omelette', isVeg: false, image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'om3', name: 'Mushroom Omelette', price: 60, description: 'Fresh sauteed mushroom egg omelette', category: 'kulfi-omelette', subCategory: 'Omelette', isVeg: false, image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'om4', name: 'Bread Omelette', price: 60, description: 'Classic street-style toasted bread omelette', category: 'kulfi-omelette', subCategory: 'Omelette', isVeg: false, image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'om5', name: 'Chicken Omelette', price: 60, description: 'Shredded spiced chicken egg omelette', category: 'kulfi-omelette', subCategory: 'Omelette', isVeg: false, image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- SLIDERS & STARTERS ---
+  { id: 'sl1', name: 'Classic Fries', price: 70, description: 'Crispy golden salted potato fries', category: 'sliders-starters', subCategory: 'Sliders & Fries', isVeg: true, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sl2', name: 'Peri Peri Fries', price: 80, description: 'French fries tossed in spicy peri peri seasoning', category: 'sliders-starters', subCategory: 'Sliders & Fries', isVeg: true, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sl3', name: 'Loaded Cheese Fries', price: 100, description: 'Crispy fries smothered in rich warm cheese sauce', category: 'sliders-starters', subCategory: 'Sliders & Fries', isVeg: true, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sl4', name: 'Chicken Nuggets (5pc)', price: 120, description: '5 crispy fried chicken nuggets with dip', category: 'sliders-starters', subCategory: 'Sliders & Fries', isVeg: false, image: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sl5', name: 'Chicken Popcorn (10pc)', price: 120, description: '10 bite-sized crunchy chicken popcorn pieces', category: 'sliders-starters', subCategory: 'Sliders & Fries', isVeg: false, image: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'st1', name: 'Honey Chilli Lotus Stump', price: 140, description: 'Crispy lotus stem tossed in sweet honey chilli glaze', category: 'sliders-starters', subCategory: 'Starters', isVeg: true, image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'st2', name: 'Salt and Pepper Mushroom', price: 140, description: 'Crispy mushrooms tossed in sea salt & crushed pepper', category: 'sliders-starters', subCategory: 'Starters', isVeg: true, image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'st3', name: 'Chilli Paneer', price: 120, description: 'Cottage cheese cubes tossed in spicy Indo-Chinese chilli sauce', category: 'sliders-starters', subCategory: 'Starters', isVeg: true, image: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'st4', name: 'Pepper Chicken', price: 170, description: 'Succulent chicken morsels cooked with freshly cracked black pepper', category: 'sliders-starters', subCategory: 'Starters', isVeg: false, image: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- SANDWICHES, PIZZAS & QUESADILLA ---
+  { id: 'sw1', name: 'Grill Cheese Sandwich', price: 100, description: 'Golden toasted sandwich with melted cheese blend', category: 'sandwich-pizza', subCategory: 'Sandwich', isVeg: true, image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sw2', name: 'Grill Chicken Sandwich', price: 120, description: 'Juicy grilled chicken stuffed in toasted artisanal bread', category: 'sandwich-pizza', subCategory: 'Sandwich', isVeg: false, image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sw3', name: 'Mumbai Favourite Sandwich', price: 120, description: 'Classic Mumbai style spiced potato & veggie grilled sandwich', category: 'sandwich-pizza', subCategory: 'Sandwich', isVeg: true, image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sw4', name: 'Club Sandwich Veg', price: 100, description: 'Double decker toasted club sandwich loaded with fresh veggies', category: 'sandwich-pizza', subCategory: 'Sandwich', isVeg: true, image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'sw5', name: 'Club Sandwich Non Veg', price: 120, description: 'Triple layer club sandwich with chicken, egg & cheese', category: 'sandwich-pizza', subCategory: 'Sandwich', isVeg: false, image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'pz1', name: "Chef's Special Pizza Veg", price: 120, description: 'Hand-tossed pizza topped with chef special veggie blend', category: 'sandwich-pizza', subCategory: 'Pizza', isVeg: true, image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'pz2', name: "Chef's Special Pizza Non Veg", price: 150, description: 'Hand-tossed pizza loaded with spiced chicken & mozzarella', category: 'sandwich-pizza', subCategory: 'Pizza', isVeg: false, image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'pz3', name: 'Farm Fresh Veg Pizza', price: 130, description: 'Topped with bell peppers, onions, sweetcorn & olives', category: 'sandwich-pizza', subCategory: 'Pizza', isVeg: true, image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'pz4', name: 'Butter Chicken Pizza', price: 180, description: 'Signature pizza topped with creamy butter chicken & cheese', category: 'sandwich-pizza', subCategory: 'Pizza', isVeg: false, image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'qd1', name: 'Veg Mexican Quesadilla', price: 100, description: 'Authentic grilled tortilla stuffed with Mexican spiced veggies & cheese', category: 'quesadilla', subCategory: 'Quesadilla', isVeg: true, image: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'qd2', name: 'Paneer Mexican Quesadilla', price: 120, description: 'Tortilla stuffed with Mexican paneer & melted cheese', category: 'quesadilla', subCategory: 'Quesadilla', isVeg: true, image: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'qd3', name: 'Chicken Mexican Quesadilla', price: 120, description: 'Tortilla stuffed with shredded Mexican chicken & cheese', category: 'quesadilla', subCategory: 'Quesadilla', isVeg: false, image: 'https://images.unsplash.com/photo-1618040996337-56904b7850b9?auto=format&fit=crop&q=80&w=400&h=400' },
+
+  // --- PASTA, PANCAKES & WAFFLES ---
+  { id: 'ps1', name: 'Alfredo Penne Pasta Veg', price: 100, description: 'Penne pasta in rich creamy parmesan alfredo sauce with veggies', category: 'pasta-pancakes-waffles', subCategory: 'Pasta', isVeg: true, image: 'https://images.unsplash.com/photo-1621996346565-e3def6166763?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ps2', name: 'Alfredo Penne Pasta Non-Veg', price: 120, description: 'Creamy alfredo penne pasta cooked with chicken', category: 'pasta-pancakes-waffles', subCategory: 'Pasta', isVeg: false, image: 'https://images.unsplash.com/photo-1621996346565-e3def6166763?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ps3', name: 'Arrabbiata Penne Pasta Veg', price: 100, description: 'Penne pasta in spicy tangy tomato arrabbiata sauce', category: 'pasta-pancakes-waffles', subCategory: 'Pasta', isVeg: true, image: 'https://images.unsplash.com/photo-1621996346565-e3def6166763?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'ps4', name: 'Arrabbiata Penne Pasta Non-Veg', price: 120, description: 'Spicy tomato arrabbiata penne pasta tossed with tender chicken', category: 'pasta-pancakes-waffles', subCategory: 'Pasta', isVeg: false, image: 'https://images.unsplash.com/photo-1621996346565-e3def6166763?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'pc1', name: 'Nutella Pancakes', price: 120, description: 'Fluffy American pancakes topped with rich Nutella drizzle', category: 'pasta-pancakes-waffles', subCategory: 'Pancakes', isVeg: true, image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'pc2', name: 'Chocolate Pancakes', price: 110, description: 'Warm pancakes drizzled with chocolate fudge sauce', category: 'pasta-pancakes-waffles', subCategory: 'Pancakes', isVeg: true, image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'pc3', name: 'Classic Pancakes', price: 90, description: 'Fluffy golden pancakes served with maple syrup', category: 'pasta-pancakes-waffles', subCategory: 'Pancakes', isVeg: true, image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'wf1', name: 'Nutella Waffles', price: 120, description: 'Crispy Belgian waffle loaded with Nutella spread', category: 'pasta-pancakes-waffles', subCategory: 'Waffles', isVeg: true, image: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'wf2', name: 'Blueberry Waffles', price: 130, description: 'Crispy waffle topped with sweet blueberry compote', category: 'pasta-pancakes-waffles', subCategory: 'Waffles', isVeg: true, image: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&q=80&w=400&h=400' },
+  { id: 'wf3', name: 'Classic Waffles', price: 90, description: 'Golden crisp Belgian waffle served with butter & syrup', category: 'pasta-pancakes-waffles', subCategory: 'Waffles', isVeg: true, image: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&q=80&w=400&h=400' }
 ];
 
 function MenuContent() {
@@ -161,7 +209,7 @@ function MenuContent() {
 
   // Cart & Category state
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [activeCategory, setActiveCategory] = useState<'all' | 'coffee' | 'specialty' | 'pastry'>('all');
+  const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -574,7 +622,7 @@ function MenuContent() {
 
         .curations-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
           gap: 1.25rem;
         }
 
@@ -649,7 +697,7 @@ function MenuContent() {
 
         @media (max-width: 768px) {
           .curations-section {
-            padding: 2.25rem 2%;
+            padding: 2.25rem 3%;
           }
 
           .curations-title {
@@ -661,19 +709,31 @@ function MenuContent() {
           }
 
           .curations-grid {
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 0.35rem !important;
+            display: flex !important;
+            overflow-x: auto !important;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 0.85rem !important;
+            gap: 0.75rem !important;
+            scrollbar-width: none;
+          }
+
+          .curations-grid::-webkit-scrollbar {
+            display: none;
           }
 
           .curation-card {
-            padding: 0.85rem 0.3rem !important;
-            border-radius: 14px !important;
+            min-width: 155px !important;
+            max-width: 165px !important;
+            flex-shrink: 0;
+            scroll-snap-align: start;
+            padding: 1.15rem 0.65rem !important;
+            border-radius: 16px !important;
           }
 
           .curation-card-icon {
-            width: 42px !important;
-            height: 44px !important;
-            margin-bottom: 0.4rem !important;
+            width: 48px !important;
+            height: 48px !important;
+            margin-bottom: 0.5rem !important;
           }
 
           .curation-card-icon svg {
@@ -682,15 +742,15 @@ function MenuContent() {
           }
 
           .curation-card-title {
-            font-size: 0.72rem !important;
-            line-height: 1.15 !important;
-            margin-bottom: 0.25rem !important;
+            font-size: 0.82rem !important;
+            line-height: 1.2 !important;
+            margin-bottom: 0.35rem !important;
           }
 
           .curation-card-desc {
-            font-size: 0.62rem !important;
+            font-size: 0.7rem !important;
             line-height: 1.25 !important;
-            margin-bottom: 0.4rem !important;
+            margin-bottom: 0.5rem !important;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -698,15 +758,57 @@ function MenuContent() {
           }
 
           .curation-card-link {
-            font-size: 0.65rem !important;
+            font-size: 0.7rem !important;
           }
         }
 
         /* Recommended list */
         .recommended-section {
-          padding: 2.5rem 6% 5rem 6%;
+          padding: 3rem 6% 5rem 6%;
           background-color: var(--bg-light);
           flex: 1;
+        }
+
+        /* Professional Category Scroll Bar */
+        .category-scroll-container {
+          display: flex;
+          gap: 0.65rem;
+          overflow-x: auto;
+          padding: 0.4rem 0.2rem 1.25rem 0.2rem;
+          margin-bottom: 2rem;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        .category-scroll-container::-webkit-scrollbar {
+          display: none;
+        }
+
+        .cat-pill-btn {
+          padding: 0.65rem 1.35rem;
+          border-radius: var(--radius-full);
+          border: 1px solid rgba(152, 78, 49, 0.2);
+          background: #FAF3EC;
+          color: #4A2E1C;
+          font-weight: 600;
+          font-size: 0.85rem;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+          box-shadow: 0 2px 8px rgba(110, 52, 31, 0.04);
+        }
+
+        .cat-pill-btn:hover {
+          background: #f2ebdf;
+          border-color: #984e31;
+          transform: translateY(-2px);
+        }
+
+        .cat-pill-btn.active {
+          background: #21100a !important;
+          color: #ffffff !important;
+          border-color: #21100a !important;
+          box-shadow: 0 6px 18px rgba(33, 16, 10, 0.28) !important;
         }
 
         .recommended-grid {
@@ -1280,7 +1382,7 @@ function MenuContent() {
         <button className="ribbon-btn" onClick={() => setIsLoginOpen(true)}>Sign In</button>
       </div>
 
-      {/* Curation Categories */}
+      {/* Curation Categories for all 15 Menu Sections */}
       <section className="curations-section">
         <div className="curations-header">
           <h3 className="curations-title">Handcrafted Curations</h3>
@@ -1293,61 +1395,91 @@ function MenuContent() {
         </div>
 
         <div className="curations-grid">
-          <div
-            className={`curation-card ${activeCategory === 'all' ? 'active' : ''}`}
-            onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}
-          >
-            <div className="curation-card-icon">
-              <HeartCupIcon size={28} />
+          {[
+            { id: 'hot-coffee', title: 'Hot Coffee', desc: 'Espresso, Americano, Latte, Cappuccino & Mocha', Icon: HotCoffeeIcon },
+            { id: 'flavour-hot-coffee', title: 'Flavour Hot Coffee', desc: 'Filter Coffee, Biscoff, White Mocha & Nutella', Icon: FlavourCoffeeIcon },
+            { id: 'leaf-tea', title: 'Leaf Tea', desc: 'Dum Tea, Masala Chai, Green Tea & Honey Ginger', Icon: TeaLeafIcon },
+            { id: 'iced-coffee', title: 'Iced Coffee', desc: 'Iced Americano, Cranberry & Vietnamese Coffee', Icon: ColdCoffeeIcon },
+            { id: 'blended-cold-coffee', title: 'Blended Cold Coffee', desc: 'Cafe Frappe, Devils Own & Crunchy Oreo Frappe', Icon: FrappeIcon },
+            { id: 'bubble-tea', title: 'Bubble Tea', desc: 'Mango, Peach, Strawberry & Orange Boba Tea', Icon: BubbleTeaIcon },
+            { id: 'hot-chocolate', title: 'Hot Chocolate', desc: 'Classic 70% Cocoa, French Cinnamon & Marshmallow', Icon: HotChocolateIcon },
+            { id: 'milkshake', title: 'Milkshakes', desc: 'Pina Colada, Ferrero Rocher & Lotus Biscoff', Icon: MilkshakeIcon },
+            { id: 'mocktails', title: 'Mocktails', desc: 'Virgin Mojito, Spicy Aam Panna & Forest Berry', Icon: CocktailsIcon },
+            { id: 'juice-smoothies', title: 'Juices & Smoothies', desc: 'Fresh Watermelon, ABC Juice & Banana Smoothie', Icon: JuiceIcon },
+            { id: 'kulfi-omelette', title: 'Kulfi & Omelettes', desc: 'Egg Kulfi, Masala Omelette & Chicken Omelette', Icon: OmeletteIcon },
+            { id: 'sliders-starters', title: 'Sliders & Starters', desc: 'Peri Peri Fries, Honey Lotus Stem & Pepper Chicken', Icon: StartersIcon },
+            { id: 'sandwich-pizza', title: 'Sandwiches & Pizzas', desc: 'Grilled Cheese, Club Sandwich & Butter Chicken Pizza', Icon: PizzaSandwichIcon },
+            { id: 'quesadilla', title: 'Mexican Quesadilla', desc: 'Authentic Veg, Paneer & Chicken Quesadillas', Icon: QuesadillaIcon },
+            { id: 'pasta-pancakes-waffles', title: 'Pastas & Waffles', desc: 'Creamy Alfredo, Nutella Pancakes & Crispy Waffles', Icon: WafflePastaIcon },
+          ].map(({ id, title, desc, Icon }) => (
+            <div
+              key={id}
+              className={`curation-card ${activeCategory === id ? 'active' : ''}`}
+              onClick={() => {
+                setActiveCategory(id);
+                setSearchQuery('');
+                const el = document.getElementById('menu-catalog');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
+            >
+              <div className="curation-card-icon">
+                <Icon size={26} />
+              </div>
+              <h4 className="curation-card-title">{title}</h4>
+              <p className="curation-card-desc">{desc}</p>
+              <span className="curation-card-link">Explore &rarr;</span>
             </div>
-            <h4 className="curation-card-title">All Curations</h4>
-            <p className="curation-card-desc">Explore our complete collection</p>
-            <span className="curation-card-link">Explore &rarr;</span>
-          </div>
-
-          <div
-            className={`curation-card ${activeCategory === 'coffee' ? 'active' : ''}`}
-            onClick={() => setActiveCategory('coffee')}
-          >
-            <div className="curation-card-icon">
-              <SnowflakeIcon size={26} />
-            </div>
-            <h4 className="curation-card-title">Cold Brews</h4>
-            <p className="curation-card-desc">Chilled to perfection, crafted to refresh</p>
-            <span className="curation-card-link">Discover &rarr;</span>
-          </div>
-
-          <div
-            className={`curation-card ${activeCategory === 'specialty' ? 'active' : ''}`}
-            onClick={() => setActiveCategory('specialty')}
-          >
-            <div className="curation-card-icon">
-              <LeafIcon size={26} />
-            </div>
-            <h4 className="curation-card-title">Matcha Series</h4>
-            <p className="curation-card-desc">Pure, vibrant, and naturally energizing</p>
-            <span className="curation-card-link">Explore &rarr;</span>
-          </div>
-
-          <div
-            className={`curation-card ${activeCategory === 'pastry' ? 'active' : ''}`}
-            onClick={() => setActiveCategory('pastry')}
-          >
-            <div className="curation-card-icon">
-              <CoffeeIcon size={26} />
-            </div>
-            <h4 className="curation-card-title">Signature Lattes</h4>
-            <p className="curation-card-desc">Classic comfort, perfectly balanced</p>
-            <span className="curation-card-link">Explore &rarr;</span>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Recommended menu cards */}
-      <section className="recommended-section">
-        <h3 className="section-heading" style={{ borderBottom: '2px solid var(--primary)', width: 'fit-content', paddingBottom: '0.25rem' }}>
-          Select & Customize
-        </h3>
+      {/* Artisanal Catalog Section */}
+      <section className="recommended-section" id="menu-catalog">
+        <div style={{ textAlign: 'center', marginBottom: '2.25rem' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '1.5px', color: '#984e31', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>
+            Artisanal Selection
+          </span>
+          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.1rem', fontWeight: 700, color: '#21100a', margin: '0 0 0.5rem 0' }}>
+            Explore Our Crafted Menu
+          </h3>
+          <p style={{ fontSize: '0.9rem', color: '#6E5444', margin: 0 }}>
+            Hand-brewed specialty drinks, fresh smoothies, and gourmet warm bites prepared fresh.
+          </p>
+        </div>
+
+        {/* Professional Scrollable Category Filter Bar with Custom SVG Icons */}
+        <div className="category-scroll-container">
+          {[
+            { id: 'all', label: 'All Items', Icon: HeartCupIcon },
+            { id: 'hot-coffee', label: 'Hot Coffee', Icon: HotCoffeeIcon },
+            { id: 'flavour-hot-coffee', label: 'Flavour Coffee', Icon: FlavourCoffeeIcon },
+            { id: 'leaf-tea', label: 'Leaf Tea', Icon: TeaLeafIcon },
+            { id: 'iced-coffee', label: 'Iced Coffee', Icon: ColdCoffeeIcon },
+            { id: 'blended-cold-coffee', label: 'Blended Coffee', Icon: FrappeIcon },
+            { id: 'bubble-tea', label: 'Bubble Tea', Icon: BubbleTeaIcon },
+            { id: 'hot-chocolate', label: 'Hot Chocolate', Icon: HotChocolateIcon },
+            { id: 'milkshake', label: 'Milkshakes', Icon: MilkshakeIcon },
+            { id: 'mocktails', label: 'Mocktails', Icon: CocktailsIcon },
+            { id: 'juice-smoothies', label: 'Juices & Smoothies', Icon: JuiceIcon },
+            { id: 'kulfi-omelette', label: 'Kulfi & Omelettes', Icon: OmeletteIcon },
+            { id: 'sliders-starters', label: 'Sliders & Starters', Icon: StartersIcon },
+            { id: 'sandwich-pizza', label: 'Sandwiches & Pizzas', Icon: PizzaSandwichIcon },
+            { id: 'quesadilla', label: 'Mexican Quesadilla', Icon: QuesadillaIcon },
+            { id: 'pasta-pancakes-waffles', label: 'Pastas & Waffles', Icon: WafflePastaIcon },
+          ].map(({ id, label, Icon }) => (
+            <button
+              key={id}
+              className={`cat-pill-btn ${activeCategory === id ? 'active' : ''}`}
+              onClick={() => { setActiveCategory(id); setSearchQuery(''); }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+            >
+              <Icon size={16} />
+              <span>{label}</span>
+            </button>
+          ))}
+        </div>
 
         {filteredItems.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--text-medium)' }}>
@@ -1370,16 +1502,16 @@ function MenuContent() {
 
                 <div className="sb-card-info">
                   <div className="sb-card-meta">
-                    <div className="sb-veg-icon">
-                      <div className="sb-veg-dot"></div>
+                    <div className="sb-veg-icon" style={{ borderColor: item.isVeg !== false ? '#4A6D55' : '#d9534f' }}>
+                      <div className="sb-veg-dot" style={{ backgroundColor: item.isVeg !== false ? '#4A6D55' : '#d9534f' }}></div>
                     </div>
                     <h4 className="sb-item-title">{item.name}</h4>
-                    <span className="sb-item-subtitle">{item.calories} | {item.size}</span>
+                    <span className="sb-item-subtitle">{item.subCategory}</span>
                   </div>
                   <p className="sb-item-desc">{item.description}</p>
 
                   <div className="sb-card-bottom">
-                    <span className="sb-item-price">₹{item.price.toFixed(2)}</span>
+                    <span className="sb-item-price">₹{item.price.toFixed(0)}</span>
                     <button className="sb-add-circle" onClick={() => addToCart(item)} title="Add to Order">+</button>
                   </div>
                 </div>

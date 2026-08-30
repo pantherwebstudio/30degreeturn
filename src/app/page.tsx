@@ -943,6 +943,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Our Story Feature Section */}
+      <section style={{ padding: '4.5rem 6%', backgroundColor: '#FAF3EC', borderTop: '1px solid rgba(152, 78, 49, 0.15)' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3.5rem', alignItems: 'center' }}>
+          <div>
+            <span style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '1.5px', color: '#984e31', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>
+              Our Story & Philosophy
+            </span>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.4rem', fontWeight: 700, color: '#21100a', margin: '0 0 1rem 0', lineHeight: 1.25 }}>
+              The 30degree Turn
+            </h3>
+            <p style={{ fontSize: '1rem', lineHeight: '1.75', color: '#4A2E1C', marginBottom: '1.25rem' }}>
+              At The 30degree Turn, we believe life is full of quiet shifts—moments when everything changes, often in the most meaningful ways. That’s the spirit behind our name and everything we bake: a celebration of transformation, intention, and joy.
+            </p>
+            <p style={{ fontSize: '0.95rem', lineHeight: '1.7', color: '#6E5444', marginBottom: '1.75rem' }}>
+              Every product is made with care, creativity, and a commitment to excellence—offering a fresh turn toward flavor, joy, and everyday celebration.
+            </p>
+            <button className="btn-primary" style={{ padding: '0.8rem 1.8rem' }} onClick={() => router.push('/about')}>
+              Read Our Full Story &rarr;
+            </button>
+          </div>
+          <div style={{ textAlign: 'center', background: '#EFE4D6', borderRadius: '28px', padding: '3rem 2rem', border: '1px solid rgba(152, 78, 49, 0.2)', boxShadow: '0 12px 30px rgba(33, 16, 10, 0.06)' }}>
+            <img src="/logo.png" alt="30° Turn Cafe Logo" style={{ width: '130px', height: '130px', borderRadius: '50%', border: '4px solid #984e31', boxShadow: '0 8px 24px rgba(33, 16, 10, 0.15)', marginBottom: '1.5rem' }} />
+            <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', color: '#21100a', margin: '0 0 0.5rem 0' }}>Where Indulgence Meets Integrity</h4>
+            <p style={{ fontSize: '0.9rem', color: '#6E5444', margin: 0, fontStyle: 'italic' }}>
+              “Turning everyday moments into extraordinary experiences.”
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Coffee Brewing Article */}
       <section className="world-coffee-section">
         <div className="article-banner">

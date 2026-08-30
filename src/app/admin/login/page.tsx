@@ -158,7 +158,7 @@ export default function AdminLogin() {
 
       <div className="login-card">
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
-          <img src="/30degree%20turn.png" alt="30° Turn Cafe Logo" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)', boxShadow: 'var(--shadow-md)' }} />
+          <img src="/logo.png" alt="30° Turn Cafe Logo" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)', boxShadow: 'var(--shadow-md)' }} />
         </div>
         <h1 className="login-title">Cafe Manager Login</h1>
         <p className="login-subtitle">Sign in to manage orders and updates</p>
