@@ -21,9 +21,9 @@
 }
 
 :root {
-  --primary: #984e31;
-  --primary-light: #af5e40;
-  --primary-dark: #6e341f;
+  --primary: #27130cfe;
+  --primary-light: #27150efe;
+  --primary-dark: #27130cfe;
   --accent: #317b98;
 
   --bg-creamy: #f2ebdf;
@@ -33,8 +33,8 @@
   --bg-light: #ebdcc9;
   --bg-sage-light: #ebdcc9;
 
-  --text-dark: #2C2522;
-  --text-medium: #6e341f;
+  --text-dark: #21100a;
+  --text-medium: #21100a;
   --text-light: #317b98;
   --text-white: #f2ebdf;
 

@@ -14,7 +14,7 @@ import {
   HeartCupIcon
 } from '@/app/components/Icons';
 
-const DESKTOP_VIDEO_URL = "./Untitled design.mp4";
+const DESKTOP_VIDEO_URL = "/cup.gif";
 const MOBILE_VIDEO_URL = "/cup.gif";
 
 export default function Home() {
@@ -141,7 +141,7 @@ export default function Home() {
           font-size: 150px;
           font-weight: 400;
           letter-spacing: 5px;
-          color: #21100a;
+          color: var(--primary-dark);
           text-transform: uppercase;
           line-height: 0.85;
           display: block;
