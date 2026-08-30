@@ -84,6 +84,7 @@ interface Order {
 }
 
 const MENU_ITEMS: MenuItem[] = [
+  { id: 'test1', name: '🧪 PhonePe Test Brew', price: 1.00, description: '₹1 Test item for live & sandbox PhonePe payment verification', category: 'hot-coffee', subCategory: 'Test Item', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },
   // --- HOT COFFEE ---
   { id: 'hc1', name: 'Espresso (Single)', price: 39, description: 'Freshly brewed single shot of espresso', category: 'hot-coffee', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },
   { id: 'hc2', name: 'Espresso (Double)', price: 49, description: 'Freshly brewed double shot of espresso', category: 'hot-coffee', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },

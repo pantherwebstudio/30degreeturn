@@ -365,6 +365,7 @@ export interface DbMenuItem {
 }
 
 const DEFAULT_MENU_ITEMS_SEED: DbMenuItem[] = [
+  { id: 'test1', name: '🧪 PhonePe Test Brew', price: 1.00, description: '₹1 Test item for live & sandbox PhonePe payment verification', category: 'hot-classics', subCategory: 'Test Item', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },
   { id: 'hc1', name: 'Espresso (Single)', price: 39, description: 'Freshly brewed single shot of espresso', category: 'hot-classics', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },
   { id: 'hc2', name: 'Espresso (Double)', price: 49, description: 'Freshly brewed double shot of espresso', category: 'hot-classics', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400&h=400' },
   { id: 'hc3', name: 'Americano', price: 49, description: 'Freshly brewed double shot of espresso stretched with hot water', category: 'hot-classics', subCategory: 'Hot Coffee', isVeg: true, image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80&w=400&h=400' },
