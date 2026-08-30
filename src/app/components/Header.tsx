@@ -100,6 +100,14 @@ export default function Header({
           position: absolute;
           left: 50%;
           transform: translateX(-50%);
+          transition: all 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sb-header:not(.hero-overlay) nav {
+          position: relative;
+          left: 0;
+          transform: translateX(0);
+          margin-left: 20px;
         }
 
         .sb-header.hero-overlay {
@@ -219,14 +227,39 @@ export default function Header({
           display: flex;
           align-items: center;
           cursor: pointer;
+          position: relative;
+          left: 0;
+          transform: translateX(0);
+          z-index: 110;
+          transition: left 0.95s cubic-bezier(0.16, 1, 0.3, 1), transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sb-header.hero-overlay .logo-box {
+          margin-top: -12px;
+        }
+
+        /* On Hero Section: Big Hero Logo (150px on desktop) */
+        .sb-header.hero-overlay .logo-box img {
+          width: 150px;
+          height: 150px;
+        }
+
+        /* Scrolled Past Hero: Animate smoothly to center and scale down to 75px */
+        .sb-header:not(.hero-overlay) .logo-box {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        .sb-header:not(.hero-overlay) .logo-box img {
+          width: 75px;
+          height: 75px;
         }
 
         .logo-box img {
-          width: 100px;
-          height: 100px;
           border-radius: 50%;
           object-fit: cover;
-          transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+          transition: all 0.95s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .logo-box:hover img {
@@ -594,8 +627,13 @@ export default function Header({
           }
         }
 
-        @media (max-width: 480px) {
-          .logo-box img {
+        @media (max-width: 768px) {
+          .sb-header.hero-overlay .logo-box img {
+            width: 110px;
+            height: 110px;
+          }
+
+          .sb-header:not(.hero-overlay) .logo-box img {
             width: 60px;
             height: 60px;
           }
@@ -604,7 +642,7 @@ export default function Header({
 
       <header className={`sb-header ${heroOverlay ? 'hero-overlay' : ''}`}>
         <div className="logo-box" onClick={() => router.push('/')}>
-          <img src="/30degree%20turn.png" alt="30° Turn Cafe Logo" />
+          <img src="/logo.png" alt="30° Turn Cafe Logo" />
         </div>
         <nav>
           <ul className="sb-nav">
