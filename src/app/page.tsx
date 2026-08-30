@@ -10,6 +10,8 @@ import {
   SparklesIcon,
   LeafIcon,
   CakeIcon,
+  SnowflakeIcon,
+  HeartCupIcon
 } from '@/app/components/Icons';
 
 const DESKTOP_VIDEO_URL = "./Untitled design.mp4";
@@ -363,74 +365,119 @@ export default function Home() {
           }
         }
 
-        /* Handcrafted Curations */
+        /* Handcrafted Curations Section matching reference design */
         .curations-section {
-          padding: 3rem 6%;
-          background-color: var(--bg-white);
+          padding: 3.5rem 6%;
+          background-color: var(--bg-cream);
+          text-align: center;
         }
 
-        .section-heading {
-          font-size: 1.4rem;
-          font-weight: 700;
-          color: var(--text-dark);
-          margin-bottom: 1.5rem;
-        }
-
-        .curations-list {
+        .curations-header {
           display: flex;
-          gap: 2.5rem;
-          overflow-x: auto;
-          padding-bottom: 1rem;
+          flex-direction: column;
+          align-items: center;
+          margin-bottom: 2rem;
         }
 
-        .curation-item {
+        .curations-title {
+          font-family: var(--font-serif);
+          font-size: 2.25rem;
+          font-weight: 700;
+          color: #4A2E1C;
+          margin-bottom: 0.5rem;
+        }
+
+        .curations-divider {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          color: #984e31;
+          margin-bottom: 0.5rem;
+        }
+
+        .curations-divider-line {
+          width: 40px;
+          height: 1px;
+          background-color: rgba(152, 78, 49, 0.4);
+        }
+
+        .curations-subtitle {
+          font-size: 0.95rem;
+          color: #6E5444;
+          font-weight: 500;
+        }
+
+        .curations-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.25rem;
+        }
+
+        .curation-card {
+          background: #FAF3EC;
+          border: 1px solid rgba(152, 78, 49, 0.16);
+          border-radius: 20px;
+          padding: 1.75rem 1rem;
           display: flex;
           flex-direction: column;
           align-items: center;
           text-align: center;
-          gap: 0.75rem;
           cursor: pointer;
-          min-width: 85px;
+          transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+          box-shadow: 0 4px 15px rgba(110, 52, 31, 0.04);
         }
 
-        .curation-circle {
-          width: 80px;
-          height: 80px;
+        .curation-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 12px 30px rgba(110, 52, 31, 0.12);
+          border-color: rgba(152, 78, 49, 0.35);
+        }
+
+        .curation-card-icon {
+          width: 64px;
+          height: 64px;
           border-radius: 50%;
-          overflow: hidden;
-          background-color: var(--bg-sage-light);
-          border: 2px solid transparent;
-          transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+          background: #EFE4D6;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.75rem;
-          box-shadow: var(--shadow-sm);
-        }
-
-        .curation-item:hover .curation-circle {
-          border-color: var(--primary);
-          transform: scale(1.1) translateY(-4px);
-          box-shadow: 0 8px 20px rgba(152, 78, 49, 0.2);
-        }
-
-        .curation-item {
+          margin-bottom: 1rem;
+          color: #6e341f;
           transition: transform 0.3s ease;
         }
 
-        .curation-item:hover {
-          transform: translateY(-2px);
+        .curation-card:hover .curation-card-icon {
+          transform: scale(1.1);
         }
 
-        .curation-name {
-          font-size: 0.8rem;
+        .curation-card-title {
+          font-family: var(--font-serif);
+          font-size: 1.1rem;
           font-weight: 700;
-          color: var(--text-dark);
+          color: #4A2E1C;
+          margin-bottom: 0.5rem;
+        }
+
+        .curation-card-desc {
+          font-size: 0.85rem;
+          color: #7A6253;
+          line-height: 1.4;
+          margin-bottom: 1.25rem;
+          flex: 1;
+        }
+
+        .curation-card-link {
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: #984e31;
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
           transition: color 0.2s ease;
         }
 
-        .curation-item:hover .curation-name {
-          color: var(--primary);
+        .curation-card:hover .curation-card-link {
+          color: #6e341f;
         }
 
         /* Call to Action Banner */
@@ -537,7 +584,56 @@ export default function Home() {
 
         @media (max-width: 768px) {
           .curations-section {
-            padding: 2rem 4%;
+            padding: 2.25rem 2%;
+          }
+
+          .curations-title {
+            font-size: 1.6rem;
+          }
+
+          .curations-subtitle {
+            font-size: 0.82rem;
+          }
+
+          .curations-grid {
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 0.35rem !important;
+          }
+
+          .curation-card {
+            padding: 0.85rem 0.3rem !important;
+            border-radius: 14px !important;
+          }
+
+          .curation-card-icon {
+            width: 42px !important;
+            height: 44px !important;
+            margin-bottom: 0.4rem !important;
+          }
+
+          .curation-card-icon svg {
+            width: 22px !important;
+            height: 22px !important;
+          }
+
+          .curation-card-title {
+            font-size: 0.72rem !important;
+            line-height: 1.15 !important;
+            margin-bottom: 0.25rem !important;
+          }
+
+          .curation-card-desc {
+            font-size: 0.62rem !important;
+            line-height: 1.25 !important;
+            margin-bottom: 0.4rem !important;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+
+          .curation-card-link {
+            font-size: 0.65rem !important;
           }
 
           .cta-section {
@@ -679,36 +775,53 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Handcrafted Curations filters */}
+      {/* Handcrafted Curations */}
       <section className="curations-section">
-        <h3 className="section-heading">Handcrafted Curations</h3>
-        <div className="curations-list">
-          <div className="curation-item" onClick={() => router.push('/menu?category=all')}>
-            <div className="curation-circle">
-              <CoffeeIcon size={30} style={{ color: 'var(--primary-dark)' }} />
+        <div className="curations-header">
+          <h3 className="curations-title">Handcrafted Curations</h3>
+          <div className="curations-divider">
+            <span className="curations-divider-line"></span>
+            <LeafIcon size={16} />
+            <span className="curations-divider-line"></span>
+          </div>
+          <p className="curations-subtitle">Carefully crafted. Perfectly poured.</p>
+        </div>
+
+        <div className="curations-grid">
+          <div className="curation-card" onClick={() => router.push('/menu?category=all')}>
+            <div className="curation-card-icon">
+              <HeartCupIcon size={28} />
             </div>
-            <span className="curation-name">All Curations</span>
+            <h4 className="curation-card-title">All Curations</h4>
+            <p className="curation-card-desc">Explore our complete collection</p>
+            <span className="curation-card-link">Explore &rarr;</span>
           </div>
 
-          <div className="curation-item" onClick={() => router.push('/menu?category=coffee')}>
-            <div className="curation-circle">
-              <SparklesIcon size={28} style={{ color: 'var(--primary)' }} />
+          <div className="curation-card" onClick={() => router.push('/menu?category=coffee')}>
+            <div className="curation-card-icon">
+              <SnowflakeIcon size={26} />
             </div>
-            <span className="curation-name">Cold Brews</span>
+            <h4 className="curation-card-title">Cold Brews</h4>
+            <p className="curation-card-desc">Chilled to perfection, crafted to refresh</p>
+            <span className="curation-card-link">Discover &rarr;</span>
           </div>
 
-          <div className="curation-item" onClick={() => router.push('/menu?category=specialty')}>
-            <div className="curation-circle">
-              <LeafIcon size={28} style={{ color: 'var(--primary-light)' }} />
+          <div className="curation-card" onClick={() => router.push('/menu?category=specialty')}>
+            <div className="curation-card-icon">
+              <LeafIcon size={26} />
             </div>
-            <span className="curation-name">Matcha Series</span>
+            <h4 className="curation-card-title">Matcha Series</h4>
+            <p className="curation-card-desc">Pure, vibrant, and naturally energizing</p>
+            <span className="curation-card-link">Explore &rarr;</span>
           </div>
 
-          <div className="curation-item" onClick={() => router.push('/menu?category=pastry')}>
-            <div className="curation-circle">
-              <CakeIcon size={28} style={{ color: 'var(--gold)' }} />
+          <div className="curation-card" onClick={() => router.push('/menu?category=pastry')}>
+            <div className="curation-card-icon">
+              <CoffeeIcon size={26} />
             </div>
-            <span className="curation-name">Bakery & Food</span>
+            <h4 className="curation-card-title">Signature Lattes</h4>
+            <p className="curation-card-desc">Classic comfort, perfectly balanced</p>
+            <span className="curation-card-link">Explore &rarr;</span>
           </div>
         </div>
       </section>

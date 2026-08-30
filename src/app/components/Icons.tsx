@@ -389,3 +389,50 @@ export const UserPlusIcon: React.FC<IconProps> = ({ size = 20, ...props }) => (
     <line x1="22" x2="16" y1="11" y2="11" />
   </svg>
 );
+
+export const SnowflakeIcon: React.FC<IconProps> = ({ size = 20, ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <line x1="12" y1="2" x2="12" y2="22" />
+    <line x1="20" y1="7" x2="4" y2="17" />
+    <line x1="20" y1="17" x2="4" y2="7" />
+    <polyline points="9 5 12 2 15 5" />
+    <polyline points="9 19 12 22 15 19" />
+    <polyline points="5 9 4 7 7 5" />
+    <polyline points="19 15 20 17 17 19" />
+    <polyline points="5 15 4 17 7 19" />
+    <polyline points="19 9 20 7 17 5" />
+  </svg>
+);
+
+export const HeartCupIcon: React.FC<IconProps> = ({ size = 20, ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M17 8h1a4 4 0 0 1 0 8h-1" />
+    <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+    <path d="M12 11c-1-1-2-1-2.5-.2C9 11.6 9 12.5 10.5 14L12 15.5l1.5-1.5c1.5-1.5 1.5-2.4 1-3.2-.5-.8-1.5-.8-2.5.2Z" fill="currentColor" stroke="none" />
+    <line x1="6" y1="2" x2="6" y2="4" />
+    <line x1="10" y1="2" x2="10" y2="4" />
+    <line x1="14" y1="2" x2="14" y2="4" />
+  </svg>
+);
