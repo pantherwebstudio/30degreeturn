@@ -679,20 +679,37 @@ export default function Header({
               display: none;
             }
 
+            .sb-header .logo-box {
+              position: absolute;
+              left: 50%;
+              transform: translateX(-50%);
+            }
+
+            .sb-header-right {
+              margin-left: auto;
+              gap: 0.4rem;
+            }
+
+            .profile-dropdown-container .profile-btn span {
+              display: none !important;
+            }
+
+            .profile-dropdown-container .profile-btn {
+              padding: 0.4rem !important;
+              width: 38px !important;
+              height: 38px !important;
+              border-radius: 50% !important;
+            }
+
             .hamburger-btn {
               display: flex;
+              margin-left: auto;
             }
 
             .search-container {
               display: none;
             }
 
-            .sb-header-right {
-              gap: 0.5rem;
-            }
-          }
-
-          @media (max-width: 768px) {
             .sb-header.hero-overlay .logo-box img {
               width: 85px;
               height: 85px;
