@@ -1,15 +1,15 @@
 ﻿import { NextResponse } from 'next/server';
-import crypto from 'crypto';
+import { createOrder } from '@/lib/db';
 
 /**
  * POST /api/payment/initiate
- * Generates a PayU payment hash and returns all required form params.
+ * Creates a Cashfree order and returns the payment_session_id for the frontend SDK.
  *
- * Required env vars:
- *   PAYU_MERCHANT_KEY   — Your PayU merchant key
- *   PAYU_MERCHANT_SALT  — Your PayU salt (v2)
- *   PAYU_BASE_URL       — https://secure.payu.in/_payment (prod) or https://test.payu.in/_payment (test)
- *   NEXT_PUBLIC_APP_URL — Your app's public base URL e.g. https://yourdomain.com
+ * Env vars:
+ *   CASHFREE_APP_ID     — Your Cashfree App ID
+ *   CASHFREE_SECRET_KEY — Your Cashfree Secret Key
+ *   CASHFREE_ENV        — "sandbox" | "production"
+ *   NEXT_PUBLIC_APP_URL — Your public app base URL
  */
 export async function POST(request: Request) {
   try {
@@ -20,54 +20,65 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing required order fields.' }, { status: 400 });
     }
 
-    const merchantKey  = process.env.PAYU_MERCHANT_KEY  || 'YOUR_MERCHANT_KEY';
-    const merchantSalt = process.env.PAYU_MERCHANT_SALT || 'YOUR_MERCHANT_SALT';
-    const payuBaseUrl  = process.env.PAYU_BASE_URL       || 'https://test.payu.in/_payment';
-    const appUrl       = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const appId     = process.env.CASHFREE_APP_ID     || '';
+    const secretKey = process.env.CASHFREE_SECRET_KEY || '';
+    const env       = process.env.CASHFREE_ENV        || 'sandbox';
+    const appUrl    = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
-    // Unique transaction ID
-    const txnId = `TXN_${Date.now()}_${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    const baseUrl = env === 'production'
+      ? 'https://api.cashfree.com/pg/orders'
+      : 'https://sandbox.cashfree.com/pg/orders';
 
-    const amount      = totalAmount.toFixed(2);
-    const productInfo = items.map((i: any) => i.name).join(', ').slice(0, 100);
-    const firstname   = customerName.trim().split(' ')[0];
-    const email       = `${customerMobile}@30degreeturn.in`;
-    const phone       = customerMobile.replace(/\D/g, '');
+    // Unique order ID
+    const orderId = `ORD_${Date.now()}_${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
-    const successUrl = `${appUrl}/api/payment/success`;
-    const failureUrl = `${appUrl}/api/payment/failure`;
+    const returnUrl = `${appUrl}/api/payment/verify?order_id={order_id}&cf_order_id={order_id}`;
 
-    // PayU Hash: sha512(key|txnid|amount|productinfo|firstname|email|udf1...|||||salt)
-    const hashString = [
-      merchantKey,
-      txnId,
-      amount,
-      productInfo,
-      firstname,
-      email,
-      '', '', '', '', '', '', '', '', '',
-      merchantSalt
-    ].join('|');
+    // Create order on Cashfree
+    const cfRes = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-client-id': appId,
+        'x-client-secret': secretKey,
+        'x-api-version': '2023-08-01',
+      },
+      body: JSON.stringify({
+        order_id: orderId,
+        order_amount: parseFloat(totalAmount.toFixed(2)),
+        order_currency: 'INR',
+        customer_details: {
+          customer_id: customerMobile.replace(/\D/g, ''),
+          customer_name: customerName,
+          customer_phone: customerMobile.replace(/\D/g, ''),
+          customer_email: `${customerMobile.replace(/\D/g, '')}@30degreeturn.in`,
+        },
+        order_meta: {
+          return_url: returnUrl,
+          notify_url: `${appUrl}/api/payment/webhook`,
+        },
+        order_note: items.map((i: any) => `${i.quantity}x ${i.name}`).join(', ').slice(0, 200),
+      }),
+    });
 
-    const hash = crypto.createHash('sha512').update(hashString).digest('hex');
+    const cfData = await cfRes.json();
 
-    const params: Record<string, string> = {
-      key:         merchantKey,
-      txnid:       txnId,
-      amount:      amount,
-      productinfo: productInfo,
-      firstname:   firstname,
-      email:       email,
-      phone:       phone,
-      surl:        successUrl,
-      furl:        failureUrl,
-      hash:        hash,
-      service_provider: 'payu_paisa',
-    };
+    if (!cfRes.ok) {
+      console.error('Cashfree create order error:', cfData);
+      return NextResponse.json(
+        { error: cfData?.message || 'Failed to create Cashfree order.' },
+        { status: 500 }
+      );
+    }
 
-    return NextResponse.json({ success: true, payuBaseUrl, params, txnId });
+    return NextResponse.json({
+      success: true,
+      paymentSessionId: cfData.payment_session_id,
+      orderId: cfData.order_id,
+      cfEnv: env,
+    });
   } catch (error: any) {
-    console.error('PayU initiate error:', error);
+    console.error('Cashfree initiate error:', error);
     return NextResponse.json({ error: 'Failed to initiate payment.' }, { status: 500 });
   }
 }

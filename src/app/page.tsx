@@ -3,15 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import Header from '@/app/components/Header';
+import Footer from '@/app/components/Footer';
 import {
-  SearchIcon,
-  UserIcon,
-  CartIcon,
   CoffeeIcon,
   SparklesIcon,
   LeafIcon,
   CakeIcon,
-  ChevronDownIcon
 } from '@/app/components/Icons';
 
 const DESKTOP_VIDEO_URL = "./Untitled design.mp4";
@@ -22,6 +20,7 @@ export default function Home() {
   const [cartCount, setCartCount] = useState(0);
   const [customer, setCustomer] = useState<{ name: string; mobile: string } | null>(null);
   const [videoUrl, setVideoUrl] = useState(DESKTOP_VIDEO_URL);
+  const [isPastHero, setIsPastHero] = useState(false);
 
   // Read cart quantity, customer login, and handle responsive video swaps on mount
   useEffect(() => {
@@ -57,7 +56,22 @@ export default function Home() {
     };
     handleResize();
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    // Track scroll for header background and hero position
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const hero = document.getElementById('cinema-hero');
+      if (hero) {
+        const heroBottom = hero.offsetTop + hero.offsetHeight;
+        setIsPastHero(scrollY + 80 >= heroBottom);
+      }
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleCustomerLogout = () => {
@@ -80,203 +94,47 @@ export default function Home() {
           min-height: 100vh;
           display: flex;
           flex-direction: column;
-          background-color: var(--bg-white);
-        }
-
-        /* Header Navigation */
-        .sb-header {
-          background-color: var(--bg-white);
-          border-bottom: 1px solid var(--border-color);
-          padding: 0.8rem 6%;
-          position: sticky;
-          top: 0;
-          z-index: 100;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-        }
-
-        .logo-box {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          cursor: pointer;
-        }
-
-        .logo-box img {
-          width: 54px;
-          height: 54px;
-          border-radius: 50%;
-          object-fit: cover;
-          transition: transform 0.2s ease;
-        }
-
-        .logo-box img:hover {
-          transform: scale(1.05);
-        }
-
-        .logo-brand {
-          font-weight: 800;
-          font-size: 1.25rem;
-          color: var(--primary-dark);
-          letter-spacing: -0.5px;
-        }
-
-        .logo-brand span {
-          color: var(--primary);
-          font-weight: 500;
-        }
-
-        .sb-nav {
-          display: flex;
-          gap: 2.2rem;
-          list-style: none;
-          align-items: center;
-        }
-
-        .sb-nav-link {
-          font-weight: 600;
-          font-size: 0.9rem;
-          color: var(--text-dark);
-          position: relative;
-          padding: 0.5rem 0;
-          background: transparent;
-          border: none;
-          cursor: pointer;
-        }
-
-        .sb-nav-link:hover {
-          color: var(--primary);
-        }
-
-        .sb-nav-link.active::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: 3px;
-          background-color: var(--primary);
-          border-radius: 2px;
-        }
-
-        .sb-header-right {
-          display: flex;
-          align-items: center;
-          gap: 1.5rem;
-        }
-
-        /* Search bar trigger */
-        .search-container {
-          position: relative;
-          width: 260px;
-          cursor: pointer;
-        }
-
-        .search-input-trigger {
-          width: 100%;
-          padding: 0.5rem 1rem 0.5rem 2.2rem;
-          border-radius: var(--radius-full);
-          border: 1px solid var(--border-color);
-          font-size: 0.85rem;
-          font-weight: 500;
-          background-color: var(--bg-light);
-          color: var(--text-light);
-          text-align: left;
-        }
-
-        .search-icon {
-          position: absolute;
-          left: 0.9rem;
-          top: 50%;
-          transform: translateY(-50%);
-          color: var(--text-light);
-          font-size: 0.9rem;
-        }
-
-        .profile-btn {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: 1.5px solid var(--text-medium);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--text-medium);
-          font-size: 1rem;
-        }
-
-        @media (max-width: 768px) {
-          .sb-header {
-            padding: 0.8rem 1.5rem;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-          }
-          .sb-nav {
-            order: 3;
-            width: 100%;
-            justify-content: center;
-            gap: 1.5rem;
-            border-top: 1px solid var(--border-color);
-            padding-top: 0.75rem;
-            margin-top: 0.25rem;
-          }
-          .search-container {
-            width: 170px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .logo-brand span {
-            display: none;
-          }
-          .search-container {
-            width: 130px;
-          }
-        }
-
-        /* Promo Ribbon */
-        .promo-ribbon {
-          background-color: var(--primary-dark);
-          color: var(--text-white);
-          padding: 0.6rem 6%;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-size: 0.825rem;
-          font-weight: 600;
-        }
-
-        .ribbon-btn {
-          background-color: transparent;
-          color: white;
-          border: 1px solid white;
-          padding: 0.25rem 0.85rem;
-          border-radius: var(--radius-full);
-          font-size: 0.75rem;
-          font-weight: 700;
-          transition: var(--transition-fast);
-        }
-
-        .ribbon-btn:hover {
-          background-color: white;
-          color: var(--primary-dark);
+          background-color: var(--bg-cream);
         }
 
         /* Cinematic Full-Video Hero Section */
         .cinema-hero {
           position: relative;
-          height: calc(100vh - 72px);
-          min-height: 520px;
           width: 100%;
-          overflow: hidden;
+          background: #000;
           display: flex;
-          align-items: flex-end;
+          align-items: center;
           justify-content: center;
-          padding-bottom: 3.5rem;
-          background-color: var(--primary-dark);
         }
+
+        /* 16:9 video wrapper */
+        .cinema-video-wrap {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 16 / 9;
+        }
+
+        .cinema-video-wrap video {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: fill;
+          pointer-events: none;
+          display: block;
+        }
+
+        @media (max-width: 768px) {
+          .cinema-video-wrap {
+            aspect-ratio: 9 / 16;
+            max-height: 100vh;
+          }
+
+          .cinema-video-wrap video {
+            object-fit: cover;
+          }
+        }
+
 
         .cinema-overlay {
           position: absolute;
@@ -388,6 +246,12 @@ export default function Home() {
           overflow: hidden;
           box-shadow: var(--shadow-md);
           flex-shrink: 0;
+          transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .season-image-box:hover {
+          transform: translateY(-6px) scale(1.02);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         @media (max-width: 992px) {
@@ -408,6 +272,7 @@ export default function Home() {
         /* Handcrafted Curations */
         .curations-section {
           padding: 3rem 6%;
+          background-color: var(--bg-white);
         }
 
         .section-heading {
@@ -441,7 +306,7 @@ export default function Home() {
           overflow: hidden;
           background-color: var(--bg-sage-light);
           border: 2px solid transparent;
-          transition: var(--transition-fast);
+          transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -451,13 +316,27 @@ export default function Home() {
 
         .curation-item:hover .curation-circle {
           border-color: var(--primary);
-          transform: scale(1.05);
+          transform: scale(1.1) translateY(-4px);
+          box-shadow: 0 8px 20px rgba(152, 78, 49, 0.2);
+        }
+
+        .curation-item {
+          transition: transform 0.3s ease;
+        }
+
+        .curation-item:hover {
+          transform: translateY(-2px);
         }
 
         .curation-name {
           font-size: 0.8rem;
           font-weight: 700;
           color: var(--text-dark);
+          transition: color 0.2s ease;
+        }
+
+        .curation-item:hover .curation-name {
+          color: var(--primary);
         }
 
         /* Call to Action Banner */
@@ -502,6 +381,24 @@ export default function Home() {
           align-items: center;
           padding: 4rem;
           box-shadow: var(--shadow-md);
+          transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .article-banner:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .article-banner:hover .article-overlay {
+          background: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.05) 100%);
+        }
+
+        .article-banner img {
+          transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .article-banner:hover img {
+          transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
@@ -551,191 +448,32 @@ export default function Home() {
           margin-bottom: 1.75rem;
         }
 
-        /* Starbucks Footer */
-        .sb-footer {
-          background-color: var(--primary-dark);
-          color: var(--text-white);
-          padding: 4rem 8% 2rem 8%;
-          font-size: 0.85rem;
-        }
-
-        .sb-footer-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 3rem;
-          margin-bottom: 3rem;
-        }
-
-        .sb-footer-col {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .sb-footer-title {
-          font-size: 0.95rem;
-          font-weight: 700;
-          color: var(--text-white);
-          letter-spacing: 0.5px;
-          margin-bottom: 0.5rem;
-        }
-
-        .sb-footer-links {
-          display: flex;
-          flex-direction: column;
-          gap: 0.85rem;
-          list-style: none;
-        }
-
-        .sb-footer-link {
-          color: var(--bg-creamy);
-          font-weight: 500;
-        }
-
-        .sb-footer-link:hover {
-          color: white;
-        }
-
-        .sb-footer-socials {
-          display: flex;
-          gap: 1.25rem;
-          margin-top: 0.5rem;
-        }
-
-        .social-icon-circle {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: 1px solid #A0B2A6;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #A0B2A6;
-          font-size: 0.9rem;
-        }
-
-        .app-badges {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-          margin-top: 0.5rem;
-        }
-
-        .sb-footer-bottom {
-          border-top: 1px solid #3B5B47;
-          padding-top: 1.5rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 1rem;
-          color: #A0B2A6;
-          font-size: 0.75rem;
-        }
-
-        .sb-footer-bottom-links {
-          display: flex;
-          gap: 1.5rem;
-        }
-
-        .sb-footer-bottom-link:hover {
-          color: white;
-        }
       `}</style>
 
-      {/* Header */}
-      <header className="sb-header">
-        <div className="logo-box" onClick={() => router.push('/')}>
-          <img src="/30degree%20turn.png" alt="30° Turn Cafe Logo" />
-          <div className="logo-brand">30° TURN<span> CAFE</span></div>
+      <Header
+        activePage="home"
+        customer={customer}
+        cartCount={cartCount}
+        heroOverlay={!isPastHero}
+        onLogout={handleCustomerLogout}
+      />
+
+      {/* Cinema 16:9 Video Hero */}
+      <section id="cinema-hero" className="cinema-hero">
+        <div className="cinema-video-wrap">
+          <video
+            key={videoUrl}
+            autoPlay
+            loop
+            muted
+            playsInline
+            controls={false}
+            onContextMenu={(e) => e.preventDefault()}
+          >
+            <source src={videoUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
-        <nav>
-          <ul className="sb-nav">
-            <li><a href="/" className="sb-nav-link active">Home</a></li>
-            <li><a href="/menu" className="sb-nav-link">Order</a></li>
-            <li>
-              <button className="sb-nav-link" onClick={() => router.push('/menu?orders=open')}>
-                Track Orders
-              </button>
-            </li>
-            {cartCount > 0 && (
-              <li>
-                <button className="btn-secondary" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem', color: 'var(--primary)', borderColor: 'var(--primary)', gap: '0.35rem' }} onClick={() => router.push('/menu?cart=open')}>
-                  <CartIcon size={14} /> Cart ({cartCount})
-                </button>
-              </li>
-            )}
-          </ul>
-        </nav>
-        <div className="sb-header-right">
-          {/* Triggers search redirecting to menu */}
-          <div className="search-container" onClick={() => router.push('/menu')}>
-            <span className="search-icon" style={{ display: 'flex', alignItems: 'center' }}><SearchIcon size={14} /></span>
-            <div className="search-input-trigger">Looking for something specific?</div>
-          </div>
-
-          {customer ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--primary)' }}>
-                Hi, {customer.name.split(' ')[0]}
-              </span>
-              <button
-                onClick={handleCustomerLogout}
-                style={{ fontSize: '0.75rem', fontWeight: '700', color: '#d9534f', textTransform: 'uppercase' }}
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <button
-              className="profile-btn"
-              onClick={() => router.push('/menu')}
-              title="Customer Sign In (Redirect to Order Menu)"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <UserIcon size={16} />
-            </button>
-          )}
-        </div>
-      </header>
-
-      {/* Seasonal Hero Banner */}
-      {/* Cinema Fullscreen Background Video Hero */}
-      <section className="cinema-hero">
-        <video
-          key={videoUrl}
-          autoPlay
-          loop
-          muted
-          playsInline
-          controls={false}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            zIndex: 1,
-            pointerEvents: 'none'
-          }}
-          onContextMenu={(e) => e.preventDefault()}
-        >
-          <source src={videoUrl} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-
-        {/* Cinematic dark overlay */}
-        <div className="cinema-overlay"></div>
-
-        {/* Scroll Down Indicator Arrow */}
-        <button
-          className="scroll-down-btn"
-          onClick={scrollToSeasonal}
-          title="Explore New Season Menu"
-        >
-          <ChevronDownIcon size={24} />
-        </button>
       </section>
 
       {/* Seasonal Feature Content Banner */}
@@ -828,64 +566,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="sb-footer">
-        <div className="sb-footer-grid">
-          <div className="sb-footer-col">
-            <h4 className="sb-footer-title">About Us</h4>
-            <ul className="sb-footer-links">
-              <li><a href="#" className="sb-footer-link">Our Heritage</a></li>
-              <li><a href="#" className="sb-footer-link">Coffeehouse Details</a></li>
-              <li><a href="#" className="sb-footer-link">Our Company</a></li>
-            </ul>
-          </div>
-          <div className="sb-footer-col">
-            <h4 className="sb-footer-title">Responsibility</h4>
-            <ul className="sb-footer-links">
-              <li><a href="#" className="sb-footer-link">Diversity & Inclusion</a></li>
-              <li><a href="#" className="sb-footer-link">Ethical Sourcing</a></li>
-              <li><a href="#" className="sb-footer-link">Environmental Stewardship</a></li>
-            </ul>
-          </div>
-          <div className="sb-footer-col">
-            <h4 className="sb-footer-title">Quick Links</h4>
-            <ul className="sb-footer-links">
-              <li><a href="#" className="sb-footer-link">Delivery FAQs</a></li>
-              <li><a href="#" className="sb-footer-link">Customer Service</a></li>
-              <li><a href="#" className="sb-footer-link">Beverage Subscription</a></li>
-            </ul>
-          </div>
-          <div className="sb-footer-col">
-            <h4 className="sb-footer-title">Social Media</h4>
-            <div className="sb-footer-socials">
-              <a href="#" className="social-icon-circle">𝕏</a>
-              <a href="#" className="social-icon-circle">f</a>
-              <a href="#" className="social-icon-circle">📷</a>
-            </div>
-            <div className="app-badges">
-              <div className="badge-img" style={{ display: 'inline-block', width: '135px', height: '40px' }}>
-                <span style={{ fontSize: '0.65rem', color: 'white', display: 'block', padding: '5px 10px', textAlign: 'center', border: '1px solid white', borderRadius: '4px' }}>GET IT ON Google Play</span>
-              </div>
-              <div className="badge-img" style={{ display: 'inline-block', width: '135px', height: '40px', marginTop: '0.5rem' }}>
-                <span style={{ fontSize: '0.65rem', color: 'white', display: 'block', padding: '5px 10px', textAlign: 'center', border: '1px solid white', borderRadius: '4px' }}>Download on App Store</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="sb-footer-bottom">
-          <div className="sb-footer-bottom-links">
-            <a href="#" className="sb-footer-bottom-link">Web Accessibility</a>
-            <span>|</span>
-            <a href="#" className="sb-footer-bottom-link">Privacy Statement</a>
-            <span>|</span>
-            <a href="#" className="sb-footer-bottom-link">Terms of Use</a>
-            <span>|</span>
-            <a href="#" className="sb-footer-bottom-link">Contact Us</a>
-          </div>
-          <p>© {new Date().getFullYear()} 30° Turn Cafe Company. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -2,19 +2,20 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { 
-  SearchIcon, 
-  UserIcon, 
-  CartIcon, 
-  KeyIcon, 
-  CloseIcon, 
-  PlusIcon, 
-  MinusIcon, 
-  CheckIcon, 
-  CoffeeIcon, 
-  LeafIcon, 
-  CakeIcon, 
-  SparklesIcon 
+import Header from '@/app/components/Header';
+import Footer from '@/app/components/Footer';
+import {
+  UserIcon,
+  CartIcon,
+  KeyIcon,
+  CloseIcon,
+  PlusIcon,
+  MinusIcon,
+  CheckIcon,
+  CoffeeIcon,
+  SparklesIcon,
+  LeafIcon,
+  CakeIcon
 } from '@/app/components/Icons';
 
 interface MenuItem {
@@ -155,21 +156,21 @@ const MENU_ITEMS: MenuItem[] = [
 function MenuContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // Cart & Category state
   const [cart, setCart] = useState<CartItem[]>([]);
   const [activeCategory, setActiveCategory] = useState<'all' | 'coffee' | 'specialty' | 'pastry'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  
+
   // Customer identity login states (Persisted in Local Storage)
   const [customer, setCustomer] = useState<{ name: string; mobile: string } | null>(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [loginName, setLoginName] = useState('');
   const [loginMobile, setLoginMobile] = useState('');
   const [loginError, setLoginError] = useState('');
-  
+
   // Hidden admin form toggles inside customer modal
   const [isAdminForm, setIsAdminForm] = useState(false);
   const [adminEmail, setAdminEmail] = useState('');
@@ -201,6 +202,10 @@ function MenuContent() {
     const cartParam = searchParams.get('cart');
     if (cartParam === 'open') {
       setIsCartOpen(true);
+    }
+    const loginParam = searchParams.get('login');
+    if (loginParam === 'open') {
+      setIsLoginOpen(true);
     }
     // Handle PayU payment callback status
     const paymentParam = searchParams.get('payment');
@@ -317,7 +322,7 @@ function MenuContent() {
       setIsLoginOpen(false);
       setLoginName('');
       setLoginMobile('');
-      
+
       // Automatically load their orders
       fetchCustomerOrders(userData.mobile);
     }
@@ -331,16 +336,20 @@ function MenuContent() {
   };
 
   const addToCart = (item: MenuItem) => {
+    if (!customer) {
+      setIsLoginOpen(true);
+      return;
+    }
     const existing = cart.find(ci => ci.item.id === item.id);
     if (existing) {
-      const updated = cart.map(ci => 
+      const updated = cart.map(ci =>
         ci.item.id === item.id ? { ...ci, quantity: ci.quantity + 1 } : ci
       );
       saveCart(updated);
     } else {
       saveCart([...cart, { item, quantity: 1 }]);
     }
-    
+
     const cartBtn = document.getElementById('cart-floating-btn');
     if (cartBtn) {
       cartBtn.classList.remove('bounce-animation');
@@ -402,7 +411,8 @@ function MenuContent() {
         setCustomer(userSession);
         localStorage.setItem('30_turn_user', JSON.stringify(userSession));
       }
-      // Store cart in localStorage so success callback can reference it
+
+      // Store pending order in localStorage for reference
       localStorage.setItem('30_turn_pending_order', JSON.stringify({
         customerName: activeName,
         customerMobile: activeMobile,
@@ -410,7 +420,7 @@ function MenuContent() {
         items: orderItems
       }));
 
-      // Call server to generate PayU hash
+      // Call server to create Cashfree order → get payment_session_id
       const res = await fetch('/api/payment/initiate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -425,23 +435,24 @@ function MenuContent() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Payment initiation failed.');
 
-      // Create and auto-submit PayU form
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = data.payuBaseUrl;
-      form.style.display = 'none';
+      const { paymentSessionId, cfEnv } = data;
 
-      const fields = data.params as Record<string, string>;
-      Object.entries(fields).forEach(([key, value]) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = value;
-        form.appendChild(input);
+      // Dynamically load Cashfree JS SDK and open checkout
+      await new Promise<void>((resolve, reject) => {
+        if ((window as any).Cashfree) { resolve(); return; }
+        const script = document.createElement('script');
+        script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error('Failed to load Cashfree SDK.'));
+        document.head.appendChild(script);
       });
 
-      document.body.appendChild(form);
-      form.submit();
+      const cashfree = (window as any).Cashfree({ mode: cfEnv === 'production' ? 'production' : 'sandbox' });
+
+      cashfree.checkout({
+        paymentSessionId,
+        redirectTarget: '_self',
+      });
 
     } catch (err: any) {
       setSubmitError(err.message || 'Payment error. Please try again.');
@@ -451,8 +462,8 @@ function MenuContent() {
 
   const filteredItems = MENU_ITEMS.filter(item => {
     const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -467,164 +478,8 @@ function MenuContent() {
           background-color: var(--bg-white);
         }
 
-        /* Header Navigation */
-        .sb-header {
-          background-color: var(--bg-white);
-          border-bottom: 1px solid var(--border-color);
-          padding: 0.8rem 6%;
-          position: sticky;
-          top: 0;
-          z-index: 100;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-        }
-
-        .logo-box {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          cursor: pointer;
-        }
-
-        .logo-box img {
-          width: 54px;
-          height: 54px;
-          border-radius: 50%;
-          object-fit: cover;
-          transition: transform 0.2s ease;
-        }
-
-        .logo-box img:hover {
-          transform: scale(1.05);
-        }
-
-        .logo-brand {
-          font-weight: 800;
-          font-size: 1.25rem;
-          color: var(--primary-dark);
-          letter-spacing: -0.5px;
-        }
-
-        .logo-brand span {
-          color: var(--primary);
-          font-weight: 500;
-        }
-
-        .sb-nav {
-          display: flex;
-          gap: 2.2rem;
-          list-style: none;
-          align-items: center;
-        }
-
-        .sb-nav-link {
-          font-weight: 600;
-          font-size: 0.9rem;
-          color: var(--text-dark);
-          position: relative;
-          padding: 0.5rem 0;
-          background: transparent;
-          border: none;
-          cursor: pointer;
-        }
-
-        .sb-nav-link:hover {
-          color: var(--primary);
-        }
-
-        .sb-nav-link.active::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          height: 3px;
-          background-color: var(--primary);
-          border-radius: 2px;
-        }
-
-        .sb-header-right {
-          display: flex;
-          align-items: center;
-          gap: 1.25rem;
-        }
-
-        /* Search input */
-        .search-container {
-          position: relative;
-          width: 240px;
-        }
-
-        .search-input {
-          width: 100%;
-          padding: 0.5rem 1rem 0.5rem 2.2rem;
-          border-radius: var(--radius-full);
-          border: 1px solid var(--border-color);
-          font-size: 0.85rem;
-          font-weight: 500;
-          box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .search-icon {
-          position: absolute;
-          left: 0.9rem;
-          top: 50%;
-          transform: translateY(-50%);
-          color: var(--text-light);
-          font-size: 0.9rem;
-        }
-
-        .profile-btn {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: 1.5px solid var(--text-medium);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--text-medium);
-          font-size: 1rem;
-          cursor: pointer;
-        }
-
-        .profile-btn:hover, .profile-btn.active {
-          border-color: var(--primary);
-          color: var(--primary);
-        }
-
-        @media (max-width: 768px) {
-          .sb-header {
-            padding: 0.8rem 1.5rem;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-          }
-          .sb-nav {
-            order: 3;
-            width: 100%;
-            justify-content: center;
-            gap: 1.5rem;
-            border-top: 1px solid var(--border-color);
-            padding-top: 0.75rem;
-            margin-top: 0.25rem;
-          }
-          .search-container {
-            width: 170px;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .logo-brand span {
-            display: none;
-          }
-          .search-container {
-            width: 130px;
-          }
-        }
-
-        /* Active Appending Info Banner */
-        .append-banner {
+        /* Ribbon */
+        .promo-ribbon {
           background-color: #f7fafc;
           border-bottom: 2px solid var(--gold);
           color: var(--text-dark);
@@ -1254,168 +1109,27 @@ function MenuContent() {
           color: var(--text-dark);
         }
 
-        /* Brand Footer */
-        .sb-footer {
-          background-color: var(--primary-dark);
-          color: var(--text-white);
-          padding: 4rem 8% 2rem 8%;
-          font-size: 0.85rem;
-        }
 
-        .sb-footer-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 3rem;
-          margin-bottom: 3rem;
-        }
-
-        .sb-footer-col {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .sb-footer-title {
-          font-size: 0.95rem;
-          font-weight: 700;
-          color: var(--text-white);
-          letter-spacing: 0.5px;
-          margin-bottom: 0.5rem;
-        }
-
-        .sb-footer-links {
-          display: flex;
-          flex-direction: column;
-          gap: 0.85rem;
-          list-style: none;
-        }
-
-        .sb-footer-link {
-          color: #A0B2A6;
-          font-weight: 500;
-        }
-
-        .sb-footer-link:hover {
-          color: white;
-        }
-
-        .sb-footer-socials {
-          display: flex;
-          gap: 1.25rem;
-          margin-top: 0.5rem;
-        }
-
-        .social-icon-circle {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: 1px solid #A0B2A6;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #A0B2A6;
-          font-size: 0.9rem;
-        }
-
-        .app-badges {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-          margin-top: 0.5rem;
-        }
-
-        .sb-footer-bottom {
-          border-top: 1px solid #3B5B47;
-          padding-top: 1.5rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 1rem;
-          color: #A0B2A6;
-          font-size: 0.75rem;
-        }
-
-        .sb-footer-bottom-links {
-          display: flex;
-          gap: 1.5rem;
-        }
-
-        .sb-footer-bottom-link:hover {
-          color: white;
-        }
       `}</style>
 
-      {/* Header */}
-      <header className="sb-header">
-        <div className="logo-box" onClick={() => router.push('/')}>
-          <img src="/30degree%20turn.png" alt="30° Turn Cafe Logo" />
-          <div className="logo-brand">30° TURN<span> CAFE</span></div>
-        </div>
-        <nav>
-          <ul className="sb-nav">
-            <li><a href="/" className="sb-nav-link">Home</a></li>
-            <li><a href="/menu" className="sb-nav-link active">Order</a></li>
-            <li>
-              <button 
-                className="sb-nav-link" 
-                onClick={() => {
-                  if (customer) {
-                    setIsOrdersOpen(true);
-                    fetchCustomerOrders(customer.mobile);
-                  } else {
-                    setIsLoginOpen(true);
-                  }
-                }}
-              >
-                Track Orders
-              </button>
-            </li>
-            {cartCount > 0 && (
-              <li>
-                <button className="btn-secondary" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem', color: 'var(--primary)', borderColor: 'var(--primary)', gap: '0.35rem' }} onClick={() => setIsCartOpen(true)}>
-                  <CartIcon size={14} /> Cart ({cartCount})
-                </button>
-              </li>
-            )}
-          </ul>
-        </nav>
-        <div className="sb-header-right">
-          <div className="search-container">
-            <span className="search-icon" style={{ display: 'flex', alignItems: 'center' }}><SearchIcon size={14} /></span>
-            <input 
-              type="text" 
-              className="search-input" 
-              placeholder="Looking for something specific?" 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          
-          {customer ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--primary)' }}>
-                Hi, {customer.name.split(' ')[0]}
-              </span>
-              <button 
-                onClick={handleCustomerLogout}
-                style={{ fontSize: '0.75rem', fontWeight: '700', color: '#d9534f', textTransform: 'uppercase' }}
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <button 
-              className="profile-btn" 
-              onClick={() => setIsLoginOpen(true)}
-              title="Customer Login / Sign In"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <UserIcon size={16} />
-            </button>
-          )}
-        </div>
-      </header>
+      <Header
+        activePage="menu"
+        customer={customer}
+        cartCount={cartCount}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onLogout={handleCustomerLogout}
+        onLoginClick={() => setIsLoginOpen(true)}
+        onCartClick={() => setIsCartOpen(true)}
+        onTrackOrdersClick={() => {
+          if (customer) {
+            setIsOrdersOpen(true);
+            fetchCustomerOrders(customer.mobile);
+          } else {
+            setIsLoginOpen(true);
+          }
+        }}
+      />
 
 
 
@@ -1431,7 +1145,7 @@ function MenuContent() {
           borderBottom: `2px solid ${paymentStatus === 'success' ? 'var(--accent)' : 'var(--primary)'}`,
         }}>
           <span style={{ fontWeight: '700', color: paymentStatus === 'success' ? 'var(--accent)' : 'var(--primary)', fontSize: '0.95rem' }}>
-            {paymentStatus === 'success' && `✅ Payment successful! Your order has been placed${paymentOrderId ? ` (ID: #${paymentOrderId.slice(0,8).toUpperCase()})` : ''}.`}
+            {paymentStatus === 'success' && `✅ Payment successful! Your order has been placed${paymentOrderId ? ` (ID: #${paymentOrderId.slice(0, 8).toUpperCase()})` : ''}.`}
             {paymentStatus === 'failed' && '❌ Payment was unsuccessful. Please try again.'}
             {paymentStatus === 'tampered' && '⚠️ Payment verification failed. Please contact support.'}
             {paymentStatus === 'error' && '⚠️ An error occurred processing your payment. Please contact support.'}
@@ -1452,7 +1166,7 @@ function MenuContent() {
       <section className="curations-section">
         <h3 className="section-heading">Handcrafted Curations</h3>
         <div className="curations-list">
-          <div 
+          <div
             className={`curation-item ${activeCategory === 'all' ? 'active' : ''}`}
             onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}
           >
@@ -1462,7 +1176,7 @@ function MenuContent() {
             <span className="curation-name">All Curations</span>
           </div>
 
-          <div 
+          <div
             className={`curation-item ${activeCategory === 'coffee' ? 'active' : ''}`}
             onClick={() => setActiveCategory('coffee')}
           >
@@ -1472,7 +1186,7 @@ function MenuContent() {
             <span className="curation-name">Cold Brews</span>
           </div>
 
-          <div 
+          <div
             className={`curation-item ${activeCategory === 'specialty' ? 'active' : ''}`}
             onClick={() => setActiveCategory('specialty')}
           >
@@ -1482,7 +1196,7 @@ function MenuContent() {
             <span className="curation-name">Matcha Series</span>
           </div>
 
-          <div 
+          <div
             className={`curation-item ${activeCategory === 'pastry' ? 'active' : ''}`}
             onClick={() => setActiveCategory('pastry')}
           >
@@ -1512,9 +1226,9 @@ function MenuContent() {
             {filteredItems.map(item => (
               <div className="sb-card" key={item.id}>
                 <div className="sb-card-img-box">
-                  <img 
-                    src={item.image} 
-                    alt={item.name} 
+                  <img
+                    src={item.image}
+                    alt={item.name}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </div>
@@ -1528,7 +1242,7 @@ function MenuContent() {
                     <span className="sb-item-subtitle">{item.calories} | {item.size}</span>
                   </div>
                   <p className="sb-item-desc">{item.description}</p>
-                  
+
                   <div className="sb-card-bottom">
                     <span className="sb-item-price">₹{item.price.toFixed(2)}</span>
                     <button className="sb-add-circle" onClick={() => addToCart(item)} title="Add to Order">+</button>
@@ -1543,8 +1257,8 @@ function MenuContent() {
       {/* Floating Cart */}
       {cartCount > 0 && (
         <div className="sb-cart-floating">
-          <button 
-            id="cart-floating-btn" 
+          <button
+            id="cart-floating-btn"
             className="sb-cart-btn bounce-animation"
             onClick={() => setIsCartOpen(true)}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -1608,8 +1322,8 @@ function MenuContent() {
                   <span>₹{cartTotal.toFixed(2)}</span>
                 </div>
 
-                <button 
-                  className="btn-primary checkout-btn" 
+                <button
+                  className="btn-primary checkout-btn"
                   onClick={() => {
                     setIsCartOpen(false);
                     setIsCheckoutOpen(true);
@@ -1632,9 +1346,9 @@ function MenuContent() {
                 {isAdminForm ? 'Manager Administration' : 'Identify / Sign In'}
               </h2>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <button 
-                  type="button" 
-                  onClick={() => setIsAdminForm(!isAdminForm)} 
+                <button
+                  type="button"
+                  onClick={() => setIsAdminForm(!isAdminForm)}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', opacity: 0.35, outline: 'none', color: 'var(--text-dark)' }}
                   title={isAdminForm ? "Back to Customer Login" : "Admin Secret Portal"}
                 >
@@ -1652,27 +1366,27 @@ function MenuContent() {
 
                   <div className="form-group">
                     <label className="form-label" htmlFor="admin-email-field">Admin Email</label>
-                    <input 
+                    <input
                       id="admin-email-field"
-                      type="email" 
-                      className="form-input" 
+                      type="email"
+                      className="form-input"
                       placeholder="admin@30degreecafe.com"
                       value={adminEmail}
                       onChange={(e) => setAdminEmail(e.target.value)}
-                      required 
+                      required
                     />
                   </div>
 
                   <div className="form-group">
                     <label className="form-label" htmlFor="admin-password-field">Password</label>
-                    <input 
+                    <input
                       id="admin-password-field"
-                      type="password" 
-                      className="form-input" 
+                      type="password"
+                      className="form-input"
                       placeholder="••••••••"
                       value={adminPassword}
                       onChange={(e) => setAdminPassword(e.target.value)}
-                      required 
+                      required
                     />
                   </div>
                 </>
@@ -1684,27 +1398,27 @@ function MenuContent() {
 
                   <div className="form-group">
                     <label className="form-label" htmlFor="login-cust-name">Your Full Name</label>
-                    <input 
+                    <input
                       id="login-cust-name"
-                      type="text" 
-                      className="form-input" 
+                      type="text"
+                      className="form-input"
                       placeholder="e.g. John Doe"
                       value={loginName}
                       onChange={(e) => setLoginName(e.target.value)}
-                      required 
+                      required
                     />
                   </div>
 
                   <div className="form-group">
                     <label className="form-label" htmlFor="login-cust-mobile">Mobile Number</label>
-                    <input 
+                    <input
                       id="login-cust-mobile"
-                      type="tel" 
-                      className="form-input" 
+                      type="tel"
+                      className="form-input"
                       placeholder="e.g. 9876543210"
                       value={loginMobile}
                       onChange={(e) => setLoginMobile(e.target.value)}
-                      required 
+                      required
                     />
                   </div>
                 </>
@@ -1728,7 +1442,7 @@ function MenuContent() {
               <h2 className="cart-drawer-title">My Orders Tracker</h2>
               <button className="close-btn" style={{ display: 'flex', alignItems: 'center' }} onClick={() => setIsOrdersOpen(false)}><CloseIcon size={20} /></button>
             </div>
-            
+
             <div className="orders-popup-body">
               {fetchingOrders ? (
                 <div style={{ textAlign: 'center', padding: '2rem 0', color: 'var(--primary)' }}>
@@ -1793,27 +1507,27 @@ function MenuContent() {
                 <>
                   <div className="form-group">
                     <label className="form-label" htmlFor="checkout-cust-name">Your Full Name</label>
-                    <input 
+                    <input
                       id="checkout-cust-name"
-                      type="text" 
-                      className="form-input" 
+                      type="text"
+                      className="form-input"
                       placeholder="e.g. John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      required 
+                      required
                     />
                   </div>
 
                   <div className="form-group">
                     <label className="form-label" htmlFor="checkout-cust-mobile">10-Digit Mobile Number</label>
-                    <input 
+                    <input
                       id="checkout-cust-mobile"
-                      type="tel" 
-                      className="form-input" 
+                      type="tel"
+                      className="form-input"
                       placeholder="e.g. 9876543210"
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
-                      required 
+                      required
                     />
                   </div>
                 </>
@@ -1885,64 +1599,7 @@ function MenuContent() {
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="sb-footer">
-        <div className="sb-footer-grid">
-          <div className="sb-footer-col">
-            <h4 className="sb-footer-title">About Us</h4>
-            <ul className="sb-footer-links">
-              <li><a href="#" className="sb-footer-link">Our Heritage</a></li>
-              <li><a href="#" className="sb-footer-link">Coffeehouse Details</a></li>
-              <li><a href="#" className="sb-footer-link">Our Company</a></li>
-            </ul>
-          </div>
-          <div className="sb-footer-col">
-            <h4 className="sb-footer-title">Responsibility</h4>
-            <ul className="sb-footer-links">
-              <li><a href="#" className="sb-footer-link">Diversity & Inclusion</a></li>
-              <li><a href="#" className="sb-footer-link">Ethical Sourcing</a></li>
-              <li><a href="#" className="sb-footer-link">Environmental Stewardship</a></li>
-            </ul>
-          </div>
-          <div className="sb-footer-col">
-            <h4 className="sb-footer-title">Quick Links</h4>
-            <ul className="sb-footer-links">
-              <li><a href="#" className="sb-footer-link">Delivery FAQs</a></li>
-              <li><a href="#" className="sb-footer-link">Customer Service</a></li>
-              <li><a href="#" className="sb-footer-link">Beverage Subscription</a></li>
-            </ul>
-          </div>
-          <div className="sb-footer-col">
-            <h4 className="sb-footer-title">Social Media</h4>
-            <div className="sb-footer-socials">
-              <a href="#" className="social-icon-circle">𝕏</a>
-              <a href="#" className="social-icon-circle">f</a>
-              <a href="#" className="social-icon-circle">📷</a>
-            </div>
-            <div className="app-badges">
-              <div className="badge-img" style={{ display: 'inline-block', width: '135px', height: '40px' }}>
-                <span style={{ fontSize: '0.65rem', color: 'white', display: 'block', padding: '5px 10px', textAlign: 'center', border: '1px solid white', borderRadius: '4px' }}>GET IT ON Google Play</span>
-              </div>
-              <div className="badge-img" style={{ display: 'inline-block', width: '135px', height: '40px', marginTop: '0.5rem' }}>
-                <span style={{ fontSize: '0.65rem', color: 'white', display: 'block', padding: '5px 10px', textAlign: 'center', border: '1px solid white', borderRadius: '4px' }}>Download on App Store</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="sb-footer-bottom">
-          <div className="sb-footer-bottom-links">
-            <a href="#" className="sb-footer-bottom-link">Web Accessibility</a>
-            <span>|</span>
-            <a href="#" className="sb-footer-bottom-link">Privacy Statement</a>
-            <span>|</span>
-            <a href="#" className="sb-footer-bottom-link">Terms of Use</a>
-            <span>|</span>
-            <a href="#" className="sb-footer-bottom-link">Contact Us</a>
-          </div>
-          <p>© {new Date().getFullYear()} 30° Turn Cafe Company. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

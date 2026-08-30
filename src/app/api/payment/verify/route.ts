@@ -3,8 +3,8 @@ import { createOrder } from '@/lib/db';
 
 /**
  * GET /api/payment/verify?order_id=xxx
- * Cashfree redirects here after payment. Verifies payment status server-side,
- * then creates the order in DB on success.
+ * Cashfree redirects the customer here after payment completion/failure.
+ * Verifies status with Cashfree API and creates the DB order on success.
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -47,24 +47,25 @@ export async function GET(request: Request) {
       return NextResponse.redirect(`${appUrl}/menu?payment=failed`);
     }
 
-    // Payment verified — create order in DB
-    const customerName   = cfData.customer_details?.customer_name || 'Customer';
-    const customerMobile = cfData.customer_details?.customer_phone || '0000000000';
-    const totalAmount    = parseFloat(cfData.order_amount) || 0;
-    const orderNote      = cfData.order_note || '';
+    // Payment confirmed — create order in DB
+    const customerName   = cfData.customer_details?.customer_name   || 'Customer';
+    const customerMobile = cfData.customer_details?.customer_phone  || '0000000000';
+    const totalAmount    = parseFloat(cfData.order_amount)           || 0;
+    const orderNote      = cfData.order_note                        || 'Cafe Order';
 
     const order = await createOrder(
       customerName,
       customerMobile,
       totalAmount,
-      [{ name: orderNote || 'Cafe Order', quantity: 1, price: totalAmount }]
+      [{ name: orderNote, quantity: 1, price: totalAmount }]
     );
 
     return NextResponse.redirect(
       `${appUrl}/menu?payment=success&orderId=${order.id}`
     );
   } catch (error: any) {
-    console.error('Cashfree verify error:', error);
+    console.error('Payment verify error:', error);
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     return NextResponse.redirect(`${appUrl}/menu?payment=error`);
   }
 }
