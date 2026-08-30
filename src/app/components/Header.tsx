@@ -103,9 +103,10 @@ export default function Header({
         }
 
         .sb-header.hero-overlay {
-          background-color: transparent;
-          border-bottom: none;
-          box-shadow: none;
+          background-color: transparent !important;
+          background: transparent !important;
+          border-bottom: none !important;
+          box-shadow: none !important;
         }
 
         .sb-header.hero-overlay .sb-nav {

@@ -63,7 +63,7 @@ export default function Home() {
       const hero = document.getElementById('cinema-hero');
       if (hero) {
         const heroBottom = hero.offsetTop + hero.offsetHeight;
-        setIsPastHero(scrollY + 80 >= heroBottom);
+        setIsPastHero(scrollY >= heroBottom - 80);
       }
     };
     handleScroll();
@@ -401,13 +401,6 @@ export default function Home() {
           transform: scale(1.05);
         }
 
-        @media (max-width: 768px) {
-          .article-banner {
-            aspect-ratio: 16/9;
-            padding: 1.5rem;
-          }
-        }
-
         .article-overlay {
           position: absolute;
           top: 0;
@@ -446,6 +439,57 @@ export default function Home() {
           font-size: 0.9rem;
           opacity: 0.9;
           margin-bottom: 1.75rem;
+        }
+
+        @media (max-width: 768px) {
+          .curations-section {
+            padding: 2rem 4%;
+          }
+
+          .cta-section {
+            padding: 2.5rem 1.25rem;
+          }
+
+          .cta-title {
+            font-size: 1.65rem;
+          }
+
+          .cta-desc {
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+          }
+
+          .world-coffee-section {
+            padding: 2rem 4%;
+          }
+
+          .article-banner {
+            aspect-ratio: auto;
+            min-height: 380px;
+            padding: 2.5rem 1.5rem;
+            display: flex;
+            align-items: center;
+          }
+
+          .article-overlay {
+            background: rgba(0, 0, 0, 0.72) !important;
+          }
+
+          .article-content {
+            max-width: 100%;
+          }
+
+          .article-title {
+            font-size: 1.5rem;
+            line-height: 1.25;
+            margin-bottom: 0.5rem;
+          }
+
+          .article-desc {
+            font-size: 0.88rem;
+            line-height: 1.45;
+            margin-bottom: 1.25rem;
+          }
         }
 
       `}</style>
