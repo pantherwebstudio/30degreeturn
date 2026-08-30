@@ -13,13 +13,14 @@ import {
 } from '@/app/components/Icons';
 
 const DESKTOP_VIDEO_URL = "./Untitled design.mp4";
-const MOBILE_VIDEO_URL = "./Untitled design.canva.mp4";
+const MOBILE_VIDEO_URL = "/Untitled design.canva.mp4";
 
 export default function Home() {
   const router = useRouter();
   const [cartCount, setCartCount] = useState(0);
   const [customer, setCustomer] = useState<{ name: string; mobile: string } | null>(null);
   const [videoUrl, setVideoUrl] = useState(DESKTOP_VIDEO_URL);
+  const [heroBgColor, setHeroBgColor] = useState('#0f1914');
   const [isPastHero, setIsPastHero] = useState(false);
 
   // Read cart quantity, customer login, and handle responsive video swaps on mount
@@ -101,10 +102,11 @@ export default function Home() {
         .cinema-hero {
           position: relative;
           width: 100%;
-          background: #000;
+          background-color: #0f1914;
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: background-color 0.4s ease;
         }
 
         /* 16:9 video wrapper */
@@ -112,6 +114,98 @@ export default function Home() {
           position: relative;
           width: 100%;
           aspect-ratio: 16 / 9;
+        }
+
+        /* Color Picker Widget over Hero */
+        .hero-color-picker {
+          position: absolute;
+          bottom: 1.25rem;
+          right: 1.25rem;
+          z-index: 10;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: rgba(0, 0, 0, 0.55);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          padding: 0.4rem 0.75rem;
+          border-radius: var(--radius-full);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+          transition: all 0.3s ease;
+        }
+
+        .color-picker-label {
+          font-size: 0.72rem;
+          font-weight: 700;
+          color: rgba(255, 255, 255, 0.9);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .color-presets {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+        }
+
+        .color-swatch {
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          border: 2px solid rgba(255, 255, 255, 0.5);
+          cursor: pointer;
+          transition: transform 0.2s ease, border-color 0.2s ease;
+          padding: 0;
+        }
+
+        .color-swatch:hover,
+        .color-swatch.active {
+          transform: scale(1.25);
+          border-color: #FFFFFF;
+          box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+        }
+
+        .color-custom-btn {
+          position: relative;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          background: rgba(255, 255, 255, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .color-input {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+        }
+
+        .color-custom-icon {
+          font-size: 0.75rem;
+          line-height: 1;
+        }
+
+        @media (max-width: 768px) {
+          .hero-color-picker {
+            bottom: 1rem;
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+            padding: 0.35rem 0.65rem;
+          }
+
+          .color-swatch {
+            width: 24px;
+            height: 24px;
+          }
         }
 
         .cinema-video-wrap video {
@@ -503,7 +597,7 @@ export default function Home() {
       />
 
       {/* Cinema 16:9 Video Hero */}
-      <section id="cinema-hero" className="cinema-hero">
+      <section id="cinema-hero" className="cinema-hero" style={{ backgroundColor: heroBgColor }}>
         <div className="cinema-video-wrap">
           <video
             key={videoUrl}
@@ -517,6 +611,31 @@ export default function Home() {
             <source src={videoUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+        </div>
+
+        {/* Dynamic Color Picker Widget */}
+        <div className="hero-color-picker">
+          <span className="color-picker-label">Bg:</span>
+          <div className="color-presets">
+            {['#0f1914', '#984e31', '#317b98', '#f2ebdf', '#1a100c', '#ffcd7d'].map((color) => (
+              <button
+                key={color}
+                className={`color-swatch ${heroBgColor === color ? 'active' : ''}`}
+                style={{ backgroundColor: color }}
+                onClick={() => setHeroBgColor(color)}
+                title={`Switch background to ${color}`}
+              />
+            ))}
+            <label className="color-custom-btn" title="Pick custom color">
+              <input
+                type="color"
+                value={heroBgColor}
+                onChange={(e) => setHeroBgColor(e.target.value)}
+                className="color-input"
+              />
+              <span className="color-custom-icon">🎨</span>
+            </label>
+          </div>
         </div>
       </section>
 
