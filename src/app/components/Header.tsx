@@ -86,7 +86,7 @@ export default function Header({
 
   return (
     <>
-      <header className={`sb-header ${heroOverlay ? 'hero-overlay' : ''}`}>
+      <header className={`sb-header ${heroOverlay ? 'hero-overlay' : 'sticky-bar'}`}>
         <style jsx global>{`
           .sb-header {
             width: 100%;
@@ -94,14 +94,14 @@ export default function Header({
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(250, 243, 236, 0.94);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(250, 243, 236, 0.96);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border-bottom: 1px solid rgba(152, 78, 49, 0.15);
             position: sticky;
             top: 0;
             z-index: 100;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
           }
 
           .sb-header.hero-overlay {
@@ -116,16 +116,90 @@ export default function Header({
             padding: 1.25rem 4%;
           }
 
-          /* Floating Capsule Navigation Pill Container on Hero */
+          /* Animated Logo: Left on Hero, Center after Hero */
+          .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10;
+          }
+
+          .sb-header.hero-overlay .logo-box {
+            position: relative;
+            left: 0;
+            transform: none;
+          }
+
+          .sb-header.sticky-bar .logo-box {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+
+          .logo-box img {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+
+          .sb-header.hero-overlay .logo-box img {
+            width: 85px;
+            height: 85px;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
+          }
+
+          .sb-brand-name {
+            font-family: var(--font-serif);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            color: var(--primary-dark);
+          }
+
+          /* Desktop Nav Positioning */
+          .sb-nav {
+            display: flex;
+            align-items: center;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+
+          /* Hero Overlay Nav: Centered Capsule */
+          .sb-header.hero-overlay .sb-nav {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+
+          /* Sticky Non-Hero Nav: Left Positioned Capsule */
+          .sb-header.sticky-bar .sb-nav {
+            position: relative;
+            left: 0;
+            transform: none;
+          }
+
+          /* Hero Navigation List Capsule */
           .sb-header.hero-overlay .sb-nav-list {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-wrap: nowrap;
+            white-space: nowrap;
             background: rgba(255, 255, 255, 0.14);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.25);
-            padding: 0.3rem 0.4rem;
+            padding: 0.35rem 0.6rem;
             border-radius: 999px;
-            gap: 0.25rem;
+            gap: 0.35rem;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+            list-style: none;
+            margin: 0;
           }
 
           .sb-header.hero-overlay .sb-nav-link {
@@ -138,6 +212,12 @@ export default function Header({
             z-index: 1;
             overflow: hidden;
             transition: color 0.3s ease, transform 0.25s ease;
+            text-decoration: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+            white-space: nowrap;
           }
 
           .sb-header.hero-overlay .sb-nav-link::before {
@@ -176,146 +256,84 @@ export default function Header({
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
           }
 
-          .sb-header.hero-overlay .logo-box img {
-            width: 85px;
-            height: 85px;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35));
-          }
-
-          .sb-header.hero-overlay .search-input-trigger {
-            background: rgba(255, 255, 255, 0.14);
-            border: 1px solid rgba(255, 255, 255, 0.28);
-            color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(14px);
-            font-size: 0.85rem;
-          }
-
-          .sb-header.hero-overlay .search-icon {
-            color: rgba(255, 255, 255, 0.85);
-          }
-
-          .sb-header.hero-overlay .profile-btn {
-            background: rgba(255, 255, 255, 0.14);
-            border: 1px solid rgba(255, 255, 255, 0.28);
-            color: #ffffff;
-            backdrop-filter: blur(14px);
-          }
-
-          .sb-header.hero-overlay .hamburger-btn {
-            color: #ffffff;
-          }
-
-          .logo-box {
+          /* Sticky Non-Hero Nav List Capsule */
+          .sb-header.sticky-bar .sb-nav-list {
+            background: #EFE4D6;
+            border: 1.5px solid rgba(152, 78, 49, 0.18);
+            border-radius: 999px;
+            padding: 0.3rem 0.5rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-
-            /* Override default logo rules to ensure clean circular mark */
-            border: none !important;
-            background: transparent !important;
-            box-shadow: none !important;
-          }
-
-          .logo-box img {
-            width: 52px;
-            height: 52px;
-            object-fit: contain;
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-          }
-
-          .logo-box:hover img {
-            transform: scale(1.06);
-          }
-
-          .sb-header.hero-overlay .logo-box img {
-            width: 150px;
-            height: 150px;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
-          }
-
-          .sb-brand-name {
-            font-family: var(--font-serif);
-            font-weight: 700;
-            font-size: 1.25rem;
-            letter-spacing: -0.02em;
-            color: var(--primary-dark);
-          }
-
-          .sb-nav {
-            display: flex;
-            align-items: center;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-          }
-
-          .sb-nav-list {
-            display: flex;
-            align-items: center;
-            gap: 1.75rem;
+            gap: 0.35rem;
             list-style: none;
             margin: 0;
-            padding: 0;
+            box-shadow: 0 4px 15px rgba(33, 16, 10, 0.04);
           }
 
-          .sb-nav-link {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-dark);
+          .sb-header.sticky-bar .sb-nav-link {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #4A2E1C;
+            padding: 0.45rem 1rem;
+            border-radius: 999px;
             text-decoration: none;
-            transition: color 0.2s ease;
+            transition: all 0.25s ease;
             position: relative;
             background: transparent;
             border: none;
             cursor: pointer;
-            padding: 0;
-          }
-
-          .sb-nav-link:hover,
-          .sb-nav-link.active {
-            color: var(--primary);
-          }
-
-          .sb-nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: var(--primary);
-            border-radius: 2px;
-          }
-
-          .sb-nav-cart-btn {
-            background-color: var(--primary);
-            color: white;
-            padding: 0.45rem 1rem;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            font-size: 0.85rem;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            transition: var(--transition-fast);
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-sm);
+            gap: 0.35rem;
           }
 
-          .sb-nav-cart-btn:hover {
-            background-color: var(--primary-light);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
+          .sb-header.sticky-bar .sb-nav-link:hover {
+            color: #984e31;
+            background: rgba(152, 78, 49, 0.12);
+          }
+
+          .sb-header.sticky-bar .sb-nav-link.active {
+            background: #21100a;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(33, 16, 10, 0.2);
           }
 
           .sb-header-right {
             display: flex;
             align-items: center;
             gap: 0.85rem;
+          }
+
+          .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #984e31;
+            background: #FAF3EC;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            border: 1px solid rgba(152, 78, 49, 0.2);
+          }
+
+          .icon-btn.logout {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid rgba(217, 83, 79, 0.3);
+            color: #d9534f;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+          }
+
+          .icon-btn.logout:hover {
+            background: #fdecea;
+            color: #c62828;
           }
 
           .hamburger-btn {
@@ -600,6 +618,14 @@ export default function Header({
             margin: 0.5rem 0;
           }
 
+          @media (max-width: 992px) {
+            .sb-header.sticky-bar .logo-box {
+              position: relative;
+              left: 0;
+              transform: none;
+            }
+          }
+
           @media (max-width: 768px) {
             .sb-header {
               padding: 0.65rem 1.25rem;
@@ -624,8 +650,8 @@ export default function Header({
 
           @media (max-width: 768px) {
             .sb-header.hero-overlay .logo-box img {
-              width: 110px;
-              height: 110px;
+              width: 60px;
+              height: 60px;
             }
 
             .sb-header:not(.hero-overlay) .logo-box img {
@@ -635,7 +661,7 @@ export default function Header({
           }
         `}</style>
 
-        {/* Brand Mark */}
+        {/* Brand Mark (Left on Hero, Center after Hero) */}
         <div className="logo-box" onClick={() => router.push('/')}>
           <img src="/logo-30degreeturn.jpeg" alt="30° Turn Cafe Logo" />
           {!heroOverlay && <span className="sb-brand-name">30° TURN CAFE</span>}
@@ -645,17 +671,14 @@ export default function Header({
         <nav className="sb-nav">
           <ul className="sb-nav-list">
             <li><a href="/" className={`sb-nav-link ${activePage === 'home' ? 'active' : ''}`}>Home</a></li>
-            <li><a href="/menu" className={`sb-nav-link ${activePage === 'menu' ? 'active' : ''}`}>Order Online</a></li>
+            <li><a href="/menu" className={`sb-nav-link ${activePage === 'menu' ? 'active' : ''}`}>Order</a></li>
             <li><a href="/about" className={`sb-nav-link ${activePage === 'about' ? 'active' : ''}`}>Our Story</a></li>
-            {onLocationClick && (
+            {!heroOverlay && onLocationClick && (
               <li>
                 <button
                   className="sb-nav-link"
                   onClick={onLocationClick}
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
                     color: locationState?.orderType === 'delivery' && locationState?.isServiceable ? '#2e7d32' : '#984e31'
                   }}
                 >
@@ -677,9 +700,9 @@ export default function Header({
                 Track Orders
               </button>
             </li>
-            {cartCount > 0 && (
+            {!heroOverlay && cartCount > 0 && (
               <li>
-                <button className="sb-nav-cart-btn" onClick={handleCartClick}>
+                <button className="sb-nav-link active" onClick={handleCartClick} style={{ background: '#984e31' }}>
                   <CartIcon size={14} /> Cart ({cartCount})
                 </button>
               </li>
@@ -707,104 +730,123 @@ export default function Header({
             </div>
           )}
 
-          {/* Cart button if item added */}
-          {cartCount > 0 && (
-            <button className="sb-nav-cart-btn" onClick={handleCartClick}>
-              <CartIcon size={14} /> ({cartCount})
-            </button>
-          )}
+          {/* If Hero Overlay, show Profile Icon Dropdown */}
+          {heroOverlay ? (
+            <div className="profile-dropdown-container">
+              <button
+                className="profile-btn"
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                title="Profile & Account"
+              >
+                <UserIcon size={18} />
+              </button>
 
-          {/* Profile Icon with Dropdown Menu */}
-          <div className="profile-dropdown-container">
-            <button
-              className="profile-btn"
-              onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-              title="Profile & Account"
-            >
-              <UserIcon size={18} />
-            </button>
+              {isProfileDropdownOpen && (
+                <>
+                  <div className="dropdown-overlay" onClick={() => setIsProfileDropdownOpen(false)} />
+                  <div className="profile-dropdown-menu">
+                    {customer ? (
+                      <div className="dropdown-header-info">
+                        <div className="dropdown-user-name">Hi, {customer.name}</div>
+                        <div className="dropdown-user-mobile">{customer.mobile}</div>
+                      </div>
+                    ) : (
+                      <div className="dropdown-header-info">
+                        <div className="dropdown-user-name">Welcome to 30° Turn</div>
+                        <div className="dropdown-user-mobile">Guest User</div>
+                      </div>
+                    )}
 
-            {isProfileDropdownOpen && (
-              <>
-                <div className="dropdown-overlay" onClick={() => setIsProfileDropdownOpen(false)} />
-                <div className="profile-dropdown-menu">
-                  {customer ? (
-                    <div className="dropdown-header-info">
-                      <div className="dropdown-user-name">Hi, {customer.name}</div>
-                      <div className="dropdown-user-mobile">{customer.mobile}</div>
-                    </div>
-                  ) : (
-                    <div className="dropdown-header-info">
-                      <div className="dropdown-user-name">Welcome to 30° Turn</div>
-                      <div className="dropdown-user-mobile">Guest User</div>
-                    </div>
-                  )}
-
-                  {onLocationClick && (
-                    <button
-                      className="dropdown-item-btn"
-                      onClick={() => {
-                        setIsProfileDropdownOpen(false);
-                        onLocationClick();
-                      }}
-                      style={{
-                        color: locationState?.orderType === 'delivery' && locationState?.isServiceable ? '#2e7d32' : '#984e31'
-                      }}
-                    >
-                      <TargetIcon size={16} />
-                      {locationState?.orderType === 'delivery' ? (
-                        locationState?.isServiceable ? (
-                          `Delivery (${locationState.distanceKm?.toFixed(1)}km)`
+                    {onLocationClick && (
+                      <button
+                        className="dropdown-item-btn"
+                        onClick={() => {
+                          setIsProfileDropdownOpen(false);
+                          onLocationClick();
+                        }}
+                        style={{
+                          color: locationState?.orderType === 'delivery' && locationState?.isServiceable ? '#2e7d32' : '#984e31'
+                        }}
+                      >
+                        <TargetIcon size={16} />
+                        {locationState?.orderType === 'delivery' ? (
+                          locationState?.isServiceable ? (
+                            `Delivery (${locationState.distanceKm?.toFixed(1)}km)`
+                          ) : (
+                            'Not Serviceable (>2km)'
+                          )
                         ) : (
-                          'Not Serviceable (>2km)'
-                        )
-                      ) : (
-                        'Dine-In / Pickup Mode'
-                      )}
-                    </button>
-                  )}
+                          'Dine-In / Pickup Mode'
+                        )}
+                      </button>
+                    )}
 
-                  <button
-                    className="dropdown-item-btn"
-                    onClick={() => {
-                      setIsProfileDropdownOpen(false);
-                      handleTrackOrders();
-                    }}
-                  >
-                    <SearchIcon size={16} />
-                    Track My Orders
-                  </button>
-
-                  <div style={{ height: '1px', background: 'rgba(152, 78, 49, 0.15)', margin: '0.4rem 0' }} />
-
-                  {customer ? (
-                    <button
-                      className="dropdown-item-btn logout"
-                      onClick={() => {
-                        setIsProfileDropdownOpen(false);
-                        handleLogout();
-                      }}
-                    >
-                      <LogOutIcon size={16} />
-                      Sign Out
-                    </button>
-                  ) : (
                     <button
                       className="dropdown-item-btn"
-                      style={{ color: '#984e31' }}
                       onClick={() => {
                         setIsProfileDropdownOpen(false);
-                        handleLoginClick();
+                        handleTrackOrders();
                       }}
                     >
-                      <LogInIcon size={16} />
-                      Customer Sign In
+                      <SearchIcon size={16} />
+                      Track My Orders
                     </button>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
+
+                    <div style={{ height: '1px', background: 'rgba(152, 78, 49, 0.15)', margin: '0.4rem 0' }} />
+
+                    {customer ? (
+                      <button
+                        className="dropdown-item-btn logout"
+                        onClick={() => {
+                          setIsProfileDropdownOpen(false);
+                          handleLogout();
+                        }}
+                      >
+                        <LogOutIcon size={16} />
+                        Sign Out
+                      </button>
+                    ) : (
+                      <button
+                        className="dropdown-item-btn"
+                        style={{ color: '#984e31' }}
+                        onClick={() => {
+                          setIsProfileDropdownOpen(false);
+                          handleLoginClick();
+                        }}
+                      >
+                        <LogInIcon size={16} />
+                        Customer Sign In
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            /* If Non-Hero Sticky Header, render Customer greeting text / Logout icon button as shown in user screenshot */
+            customer ? (
+              <div className="user-greeting">
+                <span className="greeting-icon"><UserIcon size={15} /></span>
+                <span>Hi, {customer.name.split(' ')[0]}</span>
+                <button
+                  className="icon-btn logout"
+                  onClick={handleLogout}
+                  title="Sign Out"
+                >
+                  <LogOutIcon size={14} />
+                </button>
+              </div>
+            ) : (
+              <button
+                className="profile-btn"
+                onClick={handleLoginClick}
+                title="Customer Sign In"
+                style={{ background: '#FAF3EC', color: '#984e31', border: '1px solid rgba(152, 78, 49, 0.25)' }}
+              >
+                <LogInIcon size={16} />
+              </button>
+            )
+          )}
 
           <button className="hamburger-btn" onClick={() => setIsMobileMenuOpen(true)}>
             <MenuIcon size={24} />
