@@ -472,11 +472,14 @@ export default function Header({
           right: 0;
           width: 280px;
           height: 100%;
-          background: var(--bg-white);
+          background: rgba(18, 26, 22, 0.82);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
           z-index: 310;
           display: flex;
           flex-direction: column;
-          box-shadow: var(--shadow-lg);
+          box-shadow: -5px 0 30px rgba(0, 0, 0, 0.35);
+          border-left: 1px solid rgba(255, 255, 255, 0.12);
           animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
@@ -487,7 +490,7 @@ export default function Header({
 
         .mobile-menu-header {
           padding: 1.25rem 1.5rem;
-          border-bottom: 1px solid var(--border-color);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.12);
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -496,7 +499,7 @@ export default function Header({
         .mobile-menu-title {
           font-weight: 700;
           font-size: 1.1rem;
-          color: var(--text-dark);
+          color: #FFFFFF;
         }
 
         .mobile-menu-close {
@@ -505,12 +508,15 @@ export default function Header({
           display: flex;
           align-items: center;
           justify-content: center;
-          color: var(--text-medium);
+          color: rgba(255, 255, 255, 0.85);
           border-radius: 50%;
+          border: none;
+          background: rgba(255, 255, 255, 0.1);
         }
 
         .mobile-menu-close:hover {
-          background-color: rgba(0, 0, 0, 0.05);
+          background-color: rgba(255, 255, 255, 0.25);
+          color: white;
         }
 
         .mobile-menu-body {
@@ -529,7 +535,7 @@ export default function Header({
           border-radius: var(--radius-md);
           font-weight: 600;
           font-size: 0.95rem;
-          color: var(--text-dark);
+          color: rgba(255, 255, 255, 0.9);
           cursor: pointer;
           transition: all 0.25s ease;
           text-decoration: none;
@@ -540,13 +546,13 @@ export default function Header({
         }
 
         .mobile-menu-item:hover {
-          background-color: var(--bg-light);
-          color: var(--primary);
+          background-color: rgba(255, 255, 255, 0.15);
+          color: #ffcd7d;
         }
 
         .mobile-menu-item.active {
-          background-color: rgba(152, 78, 49, 0.08);
-          color: var(--primary);
+          background-color: rgba(255, 255, 255, 0.2);
+          color: #ffcd7d;
         }
 
         .mobile-menu-item-icon {
@@ -560,7 +566,7 @@ export default function Header({
 
         .mobile-menu-divider {
           height: 1px;
-          background: var(--border-color);
+          background: rgba(255, 255, 255, 0.12);
           margin: 0.5rem 0;
         }
 
