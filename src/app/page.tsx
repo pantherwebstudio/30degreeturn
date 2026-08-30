@@ -22,7 +22,7 @@ export default function Home() {
   const [cartCount, setCartCount] = useState(0);
   const [customer, setCustomer] = useState<{ name: string; mobile: string } | null>(null);
   const [videoUrl, setVideoUrl] = useState(DESKTOP_VIDEO_URL);
-  const [heroBgColor, setHeroBgColor] = useState('#f2ebdf');
+  const [heroBgColor, setHeroBgColor] = useState('#cbab80');
   const [isPastHero, setIsPastHero] = useState(false);
 
   // Read cart quantity, customer login, and handle responsive video swaps on mount
@@ -114,8 +114,50 @@ export default function Home() {
         /* 16:9 video wrapper */
         .cinema-video-wrap {
           position: relative;
+          z-index: 2;
           width: 100%;
           aspect-ratio: 16 / 9;
+        }
+
+        /* Background Text behind GIF in Tanker webfont */
+        .hero-bg-text {
+          position: absolute;
+          top: 140px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 1;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          pointer-events: none;
+          user-select: none;
+          line-height: 0.88;
+        }
+
+        .hero-word {
+          font-family: 'Tanker-Regular', 'Inter', sans-serif;
+          font-size: 150px;
+          font-weight: 400;
+          letter-spacing: 5px;
+          color: #21100a;
+          text-transform: uppercase;
+          line-height: 0.85;
+          display: block;
+          text-align: center;
+          opacity: 0.92;
+        }
+
+        @media (max-width: 768px) {
+          .hero-bg-text {
+            top: 140px;
+          }
+
+          .hero-word {
+            font-size: clamp(50px, 15vw, 100px);
+            letter-spacing: 3px;
+          }
         }
 
         /* Color Picker Widget over Hero */
@@ -695,6 +737,12 @@ export default function Home() {
 
       {/* Cinema 16:9 Video Hero */}
       <section id="cinema-hero" className="cinema-hero" style={{ backgroundColor: heroBgColor }}>
+        {/* Background Typography behind GIF in Tanker-Regular webfont */}
+        <div className="hero-bg-text">
+          <span className="hero-word">BREWED</span>
+          <span className="hero-word">DIFFERENT</span>
+        </div>
+
         <div className="cinema-video-wrap">
           {videoUrl.endsWith('.gif') ? (
             <img
@@ -737,7 +785,7 @@ export default function Home() {
         <div className="hero-color-picker">
           <span className="color-picker-label">Bg:</span>
           <div className="color-presets">
-            {['#f2ebdf', '#ebdcc9', '#faf3ec', '#984e31', '#6e341f', '#4a2e1c'].map((color) => (
+            {['#cbab80', '#f2ebdf', '#ebdcc9', '#faf3ec', '#984e31', '#6e341f', '#4a2e1c'].map((color) => (
               <button
                 key={color}
                 className={`color-swatch ${heroBgColor === color ? 'active' : ''}`}
