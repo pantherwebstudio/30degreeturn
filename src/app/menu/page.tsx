@@ -534,7 +534,7 @@ function MenuContent() {
   });
 
   return (
-    <div className="starbucks-layout">
+    <div className="starbucks-layout has-fixed-header-padding">
       {/* Dynamic CSS Styles */}
       <style jsx global>{`
         .starbucks-layout {

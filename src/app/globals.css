@@ -255,11 +255,15 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-white);
+  padding-top: 0;
+}
+
+.starbucks-layout.has-fixed-header-padding {
   padding-top: 80px;
 }
 
 @media (max-width: 768px) {
-  .starbucks-layout {
+  .starbucks-layout.has-fixed-header-padding {
     padding-top: 68px;
   }
 }
