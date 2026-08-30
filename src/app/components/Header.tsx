@@ -401,13 +401,13 @@ export default function Header({
             position: absolute;
             top: calc(100% + 12px);
             right: 0;
-            width: 260px;
-            background: rgba(250, 243, 236, 0.58);
+            width: 270px;
+            background: rgba(33, 16, 10, 0.88);
             backdrop-filter: blur(28px) saturate(190%);
             -webkit-backdrop-filter: blur(28px) saturate(190%);
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(152, 78, 49, 0.35);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             padding: 1.25rem;
             z-index: 1000;
             color: #FAF3EC;
@@ -420,7 +420,7 @@ export default function Header({
           }
 
           .dropdown-header-info {
-            border-bottom: 1px solid rgba(152, 78, 49, 0.2);
+            border-bottom: 1px solid rgba(250, 243, 236, 0.15);
             padding-bottom: 0.75rem;
             margin-bottom: 0.75rem;
           }
@@ -428,12 +428,12 @@ export default function Header({
           .dropdown-user-name {
             font-weight: 800;
             font-size: 1rem;
-            color: #21100a;
+            color: #FAF3EC;
           }
 
           .dropdown-user-mobile {
             font-size: 0.82rem;
-            color: #6E5444;
+            color: #D2B48C;
             margin-top: 0.15rem;
           }
 
@@ -443,9 +443,9 @@ export default function Header({
             border-radius: 14px;
             border: none;
             background: transparent;
-            color: #21100a;
+            color: #FAF3EC;
             font-size: 0.88rem;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -455,17 +455,17 @@ export default function Header({
           }
 
           .dropdown-item-btn:hover {
-            background: rgba(152, 78, 49, 0.15);
-            color: #984e31;
+            background: rgba(250, 243, 236, 0.15);
+            color: #ffffff;
           }
 
           .dropdown-item-btn.logout {
-            color: #c62828;
+            color: #ff6b6b;
           }
 
           .dropdown-item-btn.logout:hover {
-            background: #fdecea;
-            color: #c62828;
+            background: rgba(217, 83, 79, 0.2);
+            color: #ff8787;
           }
 
           .search-container {
