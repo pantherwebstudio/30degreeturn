@@ -13,7 +13,7 @@ import {
 } from '@/app/components/Icons';
 
 const DESKTOP_VIDEO_URL = "./Untitled design.mp4";
-const MOBILE_VIDEO_URL = "/clean_Rotating_glass_with_coffee_beans_202608301101.mp4";
+const MOBILE_VIDEO_URL = "/Untitled design.gif";
 
 export default function Home() {
   const router = useRouter();
@@ -599,18 +599,38 @@ export default function Home() {
       {/* Cinema 16:9 Video Hero */}
       <section id="cinema-hero" className="cinema-hero" style={{ backgroundColor: heroBgColor }}>
         <div className="cinema-video-wrap">
-          <video
-            key={videoUrl}
-            autoPlay
-            loop
-            muted
-            playsInline
-            controls={false}
-            onContextMenu={(e) => e.preventDefault()}
-          >
-            <source src={videoUrl} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+          {videoUrl.endsWith('.gif') ? (
+            <img
+              key={videoUrl}
+              src={videoUrl}
+              alt="Hero coffee animation"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                display: 'block'
+              }}
+            />
+          ) : (
+            <video
+              key={videoUrl}
+              autoPlay
+              loop
+              muted
+              playsInline
+              controls={false}
+              onContextMenu={(e) => e.preventDefault()}
+            >
+              {videoUrl.endsWith('.webm') ? (
+                <source src={videoUrl} type='video/webm; codecs="vp9"' />
+              ) : (
+                <source src={videoUrl} type="video/mp4" />
+              )}
+              Your browser does not support the video tag.
+            </video>
+          )}
         </div>
 
         {/* Dynamic Color Picker Widget */}

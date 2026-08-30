@@ -460,9 +460,9 @@ export default function Header({
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0, 0, 0, 0.15);
-          backdrop-filter: blur(4px);
-          -webkit-backdrop-filter: blur(4px);
+          background: rgba(0, 0, 0, 0.2) !important;
+          backdrop-filter: blur(6px) !important;
+          -webkit-backdrop-filter: blur(6px) !important;
           z-index: 300;
           animation: fadeIn 0.2s ease forwards;
         }
@@ -473,14 +473,14 @@ export default function Header({
           right: 0;
           width: 280px;
           height: 100%;
-          background: rgba(255, 255, 255, 0.15) !important;
-          backdrop-filter: blur(24px) saturate(180%);
-          -webkit-backdrop-filter: blur(24px) saturate(180%);
+          background: rgba(242, 235, 223, 0.88) !important;
+          backdrop-filter: blur(24px) saturate(180%) !important;
+          -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
           z-index: 310;
           display: flex;
           flex-direction: column;
           box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
-          border-left: 1px solid rgba(255, 255, 255, 0.3);
+          border-left: 1px solid rgba(152, 78, 49, 0.2);
           animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
@@ -491,7 +491,7 @@ export default function Header({
 
         .mobile-menu-header {
           padding: 1.25rem 1.5rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+          border-bottom: 1px solid rgba(152, 78, 49, 0.15);
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -500,8 +500,7 @@ export default function Header({
         .mobile-menu-title {
           font-weight: 700;
           font-size: 1.1rem;
-          color: #FFFFFF;
-          text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+          color: #6e341f;
         }
 
         .mobile-menu-close {
@@ -510,16 +509,15 @@ export default function Header({
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #FFFFFF;
+          color: #984e31;
           border-radius: 50%;
-          border: 1px solid rgba(255, 255, 255, 0.4);
-          background: rgba(0, 0, 0, 0.2);
-          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+          border: 1px solid rgba(152, 78, 49, 0.2);
+          background: rgba(152, 78, 49, 0.1);
         }
 
         .mobile-menu-close:hover {
-          background-color: rgba(255, 255, 255, 0.35);
-          color: white;
+          background-color: rgba(152, 78, 49, 0.2);
+          color: #6e341f;
         }
 
         .mobile-menu-body {
@@ -538,27 +536,24 @@ export default function Header({
           border-radius: var(--radius-md);
           font-weight: 600;
           font-size: 0.95rem;
-          color: #FFFFFF;
-          text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+          color: #984e31;
           cursor: pointer;
           transition: all 0.25s ease;
           text-decoration: none;
           border: none;
-          background: rgba(0, 0, 0, 0.2);
+          background: transparent;
           width: 100%;
           text-align: left;
         }
 
         .mobile-menu-item:hover {
-          background-color: rgba(255, 255, 255, 0.3);
-          color: #ffcd7d;
-          text-shadow: none;
+          background-color: rgba(152, 78, 49, 0.12);
+          color: #6e341f;
         }
 
         .mobile-menu-item.active {
-          background-color: rgba(255, 255, 255, 0.35);
-          color: #ffcd7d;
-          text-shadow: none;
+          background-color: rgba(152, 78, 49, 0.18);
+          color: #6e341f;
         }
 
         .mobile-menu-item-icon {
@@ -568,11 +563,12 @@ export default function Header({
           display: flex;
           align-items: center;
           justify-content: center;
+          color: #984e31;
         }
 
         .mobile-menu-divider {
           height: 1px;
-          background: rgba(255, 255, 255, 0.25);
+          background: rgba(152, 78, 49, 0.15);
           margin: 0.5rem 0;
         }
 
