@@ -91,7 +91,30 @@ export default function Footer() {
         <div className="sb-footer-grid">
           <div className="sb-footer-col">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '0.25rem' }}>
-              <img src="/logo.png" alt="30° Turn Cafe Logo" style={{ width: '45px', height: '45px', borderRadius: '50%', objectFit: 'cover' }} />
+              <div style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '50%',
+                backgroundColor: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                overflow: 'hidden',
+                flexShrink: 0
+              }}>
+                <img
+                  src="/logo-30degreeturn.jpeg"
+                  alt="30° Turn Cafe Logo"
+                  style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    backgroundColor: '#FAF3EC'
+                  }}
+                />
+              </div>
               <h4 className="sb-footer-title" style={{ margin: 0 }}>30° Turn Cafe</h4>
             </div>
             <p className="sb-footer-desc">

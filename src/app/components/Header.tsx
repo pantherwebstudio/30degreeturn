@@ -11,7 +11,8 @@ import {
   LogOutIcon,
   LogInIcon,
   CoffeeIcon,
-  SparklesIcon
+  SparklesIcon,
+  TargetIcon
 } from '@/app/components/Icons';
 
 interface HeaderProps {
@@ -25,6 +26,8 @@ interface HeaderProps {
   onLoginClick?: () => void;
   onCartClick?: () => void;
   onTrackOrdersClick?: () => void;
+  onLocationClick?: () => void;
+  locationState?: { orderType: 'delivery' | 'dine-in'; isServiceable: boolean; distanceKm: number | null };
 }
 
 export default function Header({
@@ -38,6 +41,8 @@ export default function Header({
   onLoginClick,
   onCartClick,
   onTrackOrdersClick,
+  onLocationClick,
+  locationState,
 }: HeaderProps) {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -258,14 +263,17 @@ export default function Header({
         }
 
         .logo-box img {
-          border-radius: 50%;
-          object-fit: cover;
-          transition: all 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+          border-radius: 0;
+          border: none;
+          background: transparent;
+          box-shadow: none;
+          object-fit: contain;
+          transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .logo-box:hover img {
-          transform: scale(1.08) rotate(3deg);
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+          transform: scale(1.05);
+          box-shadow: none;
         }
 
         .sb-nav {
@@ -643,13 +651,38 @@ export default function Header({
 
       <header className={`sb-header ${heroOverlay ? 'hero-overlay' : ''}`}>
         <div className="logo-box" onClick={() => router.push('/')}>
-          <img src="/logo.png" alt="30° Turn Cafe Logo" />
+          <img src="/logo-30degreeturn.jpeg" alt="30° Turn Cafe Logo" />
         </div>
         <nav>
           <ul className="sb-nav">
             <li><a href="/" className={`sb-nav-link ${activePage === 'home' ? 'active' : ''}`}>Home</a></li>
             <li><a href="/menu" className={`sb-nav-link ${activePage === 'menu' ? 'active' : ''}`}>Order</a></li>
             <li><a href="/about" className={`sb-nav-link ${activePage === 'about' ? 'active' : ''}`}>Our Story</a></li>
+            {onLocationClick && (
+              <li>
+                <button
+                  className="sb-nav-link"
+                  onClick={onLocationClick}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    color: locationState?.orderType === 'delivery' && locationState?.isServiceable ? '#2e7d32' : '#984e31'
+                  }}
+                >
+                  <TargetIcon size={14} />
+                  {locationState?.orderType === 'delivery' ? (
+                    locationState?.isServiceable ? (
+                      `Delivery (${locationState.distanceKm?.toFixed(1)}km)`
+                    ) : (
+                      'Not Serviceable (>2km)'
+                    )
+                  ) : (
+                    'Dine-In / Pickup'
+                  )}
+                </button>
+              </li>
+            )}
             <li>
               <button className="sb-nav-link" onClick={handleTrackOrders}>
                 Track Orders

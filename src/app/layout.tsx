@@ -6,8 +6,8 @@ export const metadata: Metadata = {
   description: 'Welcome to 30° Turn Cafe. Savor our carefully curated, artisanal coffees, premium matcha, and fresh pastries in a warm, aesthetic atmosphere.',
   keywords: ['30 degree turn cafe', 'cafe', 'coffee shop', 'artisanal coffee', 'matcha', 'pastries', 'order coffee online'],
   icons: {
-    icon: '/logo.png',
-    apple: '/logo.png',
+    icon: '/logo-30degreeturn.jpeg',
+    apple: '/logo-30degreeturn.jpeg',
   },
   openGraph: {
     title: '30° Turn Cafe | Artisanal Coffee & Brews',

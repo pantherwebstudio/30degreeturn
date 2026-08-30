@@ -10,7 +10,7 @@ import { getSessionUser } from '@/lib/auth';
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
-    const { customerName, customerMobile, totalAmount, items } = body;
+    const { customerName, customerMobile, totalAmount, items, orderType } = body;
 
     // Validate inputs
     if (!customerName || !customerMobile) {
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     const finalTotal = typeof totalAmount === 'number' ? totalAmount : calculatedTotal;
 
     // Save to Postgres
-    const order = await createOrder(customerName, customerMobile, finalTotal, items);
+    const order = await createOrder(customerName, customerMobile, finalTotal, items, orderType || 'dine-in');
 
     return NextResponse.json({ success: true, order }, { status: 201 });
   } catch (error: any) {

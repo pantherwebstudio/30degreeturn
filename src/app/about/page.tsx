@@ -82,17 +82,18 @@ export default function AboutPage() {
         }
 
         .about-logo-img {
-          width: 140px;
-          height: 140px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 4px solid #984e31;
-          box-shadow: 0 12px 32px rgba(33, 16, 10, 0.15);
+          width: 160px;
+          height: auto;
+          border-radius: 0;
+          border: none;
+          background: transparent;
+          box-shadow: none;
+          object-fit: contain;
           transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .about-logo-img:hover {
-          transform: scale(1.06) rotate(3deg);
+          transform: scale(1.05);
         }
 
         .about-badge {
@@ -361,7 +362,7 @@ export default function AboutPage() {
       {/* Hero Header Section */}
       <section className="about-hero">
         <div className="about-logo-wrapper">
-          <img src="/logo.png" alt="30° Turn Cafe Logo" className="about-logo-img" />
+          <img src="/logo-30degreeturn.jpeg" alt="30° Turn Cafe Logo" className="about-logo-img" />
         </div>
         <span className="about-badge">Our Journey & Philosophy</span>
         <h1 className="about-hero-title">The 30degree Turn – Our Story</h1>

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer';
+import LocationModal from '@/app/components/LocationModal';
 import {
   CoffeeIcon,
   SparklesIcon,
@@ -15,7 +16,7 @@ import {
   PaletteIcon
 } from '@/app/components/Icons';
 
-const DESKTOP_VIDEO_URL = "/cup-deskto.gif";
+const DESKTOP_VIDEO_URL = "/cup-desktop.gif";
 const MOBILE_VIDEO_URL = "/cup.gif";
 
 export default function Home() {
@@ -26,6 +27,20 @@ export default function Home() {
   const [heroBgColor, setHeroBgColor] = useState('#cbab80');
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
+
+  // Location Serviceability & Order Type state (2km radius limit)
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [orderType, setOrderType] = useState<'delivery' | 'dine-in'>('dine-in');
+  const [isServiceable, setIsServiceable] = useState<boolean>(false);
+  const [userDistanceKm, setUserDistanceKm] = useState<number | null>(null);
+
+  useEffect(() => {
+    const hasChecked = sessionStorage.getItem('30_loc_prompted');
+    if (!hasChecked) {
+      setIsLocationModalOpen(true);
+      sessionStorage.setItem('30_loc_prompted', 'true');
+    }
+  }, []);
 
   // Read cart quantity, customer login, and handle responsive video swaps on mount
   useEffect(() => {
@@ -766,12 +781,24 @@ export default function Home() {
 
       `}</style>
 
+      <LocationModal
+        isOpen={isLocationModalOpen}
+        onClose={() => setIsLocationModalOpen(false)}
+        onSelectOrderType={(type, serviceable, distKm) => {
+          setOrderType(type);
+          setIsServiceable(serviceable);
+          setUserDistanceKm(distKm);
+        }}
+      />
+
       <Header
         activePage="home"
         customer={customer}
         cartCount={cartCount}
         heroOverlay={!isPastHero}
         onLogout={handleCustomerLogout}
+        onLocationClick={() => setIsLocationModalOpen(true)}
+        locationState={{ orderType, isServiceable, distanceKm: userDistanceKm }}
       />
 
       {/* Cinema 16:9 Video Hero */}
@@ -964,7 +991,7 @@ export default function Home() {
             </button>
           </div>
           <div style={{ textAlign: 'center', background: '#EFE4D6', borderRadius: '28px', padding: '3rem 2rem', border: '1px solid rgba(152, 78, 49, 0.2)', boxShadow: '0 12px 30px rgba(33, 16, 10, 0.06)' }}>
-            <img src="/logo.png" alt="30° Turn Cafe Logo" style={{ width: '130px', height: '130px', borderRadius: '50%', border: '4px solid #984e31', boxShadow: '0 8px 24px rgba(33, 16, 10, 0.15)', marginBottom: '1.5rem' }} />
+            <img src="/logo-30degreeturn.jpeg" alt="30° Turn Cafe Logo" style={{ width: '150px', height: 'auto', border: 'none', background: 'transparent', boxShadow: 'none', marginBottom: '1.5rem' }} />
             <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', color: '#21100a', margin: '0 0 0.5rem 0' }}>Where Indulgence Meets Integrity</h4>
             <p style={{ fontSize: '0.9rem', color: '#6E5444', margin: 0, fontStyle: 'italic' }}>
               “Turning everyday moments into extraordinary experiences.”

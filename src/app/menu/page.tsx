@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer';
+import LocationModal from '@/app/components/LocationModal';
 import {
   UserIcon,
   CartIcon,
@@ -213,6 +214,20 @@ function MenuContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  // Location Serviceability & Order Type state (2km radius limit)
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [orderType, setOrderType] = useState<'delivery' | 'dine-in'>('dine-in');
+  const [isServiceable, setIsServiceable] = useState<boolean>(false);
+  const [userDistanceKm, setUserDistanceKm] = useState<number | null>(null);
+
+  useEffect(() => {
+    const hasChecked = sessionStorage.getItem('30_loc_prompted');
+    if (!hasChecked) {
+      setIsLocationModalOpen(true);
+      sessionStorage.setItem('30_loc_prompted', 'true');
+    }
+  }, []);
 
   // Customer identity login states (Persisted in Local Storage)
   const [customer, setCustomer] = useState<{ name: string; mobile: string } | null>(null);
@@ -1332,6 +1347,16 @@ function MenuContent() {
 
       `}</style>
 
+      <LocationModal
+        isOpen={isLocationModalOpen}
+        onClose={() => setIsLocationModalOpen(false)}
+        onSelectOrderType={(type, serviceable, distKm) => {
+          setOrderType(type);
+          setIsServiceable(serviceable);
+          setUserDistanceKm(distKm);
+        }}
+      />
+
       <Header
         activePage="menu"
         customer={customer}
@@ -1341,6 +1366,8 @@ function MenuContent() {
         onLogout={handleCustomerLogout}
         onLoginClick={() => setIsLoginOpen(true)}
         onCartClick={() => setIsCartOpen(true)}
+        onLocationClick={() => setIsLocationModalOpen(true)}
+        locationState={{ orderType, isServiceable, distanceKm: userDistanceKm }}
         onTrackOrdersClick={() => {
           if (customer) {
             setIsOrdersOpen(true);
