@@ -82,8 +82,8 @@ export default function Home() {
       const scrollY = window.scrollY;
       const hero = document.getElementById('cinema-hero');
       if (hero) {
-        const heroBottom = hero.offsetTop + hero.offsetHeight;
-        setIsPastHero(scrollY >= heroBottom - 80);
+        const triggerPoint = hero.offsetHeight - 120;
+        setIsPastHero(scrollY >= triggerPoint);
       }
     };
     handleScroll();

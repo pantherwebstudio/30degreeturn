@@ -16,7 +16,9 @@ export async function POST(request: Request) {
     const appId     = process.env.CASHFREE_APP_ID     || '';
     const secretKey = process.env.CASHFREE_SECRET_KEY || '';
     const env       = process.env.CASHFREE_ENV        || 'sandbox';
-    const appUrl    = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const host      = request.headers.get('host') || 'localhost:3000';
+    const proto     = request.headers.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
+    const appUrl    = process.env.NEXT_PUBLIC_APP_URL || `${proto}://${host}`;
 
     const baseUrl = env === 'production'
       ? 'https://api.cashfree.com/pg/orders'

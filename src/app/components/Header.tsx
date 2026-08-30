@@ -98,20 +98,27 @@ export default function Header({
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             border-bottom: 1px solid rgba(152, 78, 49, 0.15);
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
             z-index: 100;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: background 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        backdrop-filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        -webkit-backdrop-filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        padding 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                        border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
           }
 
           .sb-header.hero-overlay {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             background: transparent !important;
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
-            border-bottom: none !important;
+            border-bottom: 1px solid transparent !important;
+            box-shadow: none !important;
             z-index: 100;
             padding: 1.25rem 4%;
           }
@@ -125,7 +132,7 @@ export default function Header({
             border: none !important;
             background: transparent !important;
             box-shadow: none !important;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 10;
           }
 
@@ -145,7 +152,7 @@ export default function Header({
             width: 52px;
             height: 52px;
             object-fit: contain;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
           }
 
           .sb-header.hero-overlay .logo-box img {
@@ -166,7 +173,7 @@ export default function Header({
           .sb-nav {
             display: flex;
             align-items: center;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
           }
 
           /* Hero Overlay Nav: Centered Capsule */
@@ -478,6 +485,23 @@ export default function Header({
             color: var(--text-light);
             text-align: left;
             transition: all 0.3s ease;
+          }
+
+          .sb-header.hero-overlay .search-input-trigger {
+            background: rgba(255, 255, 255, 0.14) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            color: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18) !important;
+            border-radius: 999px !important;
+            padding: 0.55rem 1rem 0.55rem 2.3rem !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+          }
+
+          .sb-header.hero-overlay .search-icon {
+            color: rgba(255, 255, 255, 0.9) !important;
           }
 
           .search-container:hover .search-input-trigger {

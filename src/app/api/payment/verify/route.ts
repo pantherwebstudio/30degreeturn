@@ -9,7 +9,9 @@ import { createOrder } from '@/lib/db';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const orderId = searchParams.get('order_id') || searchParams.get('cf_order_id');
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const host    = request.headers.get('host') || 'localhost:3000';
+  const proto   = request.headers.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
+  const appUrl  = process.env.NEXT_PUBLIC_APP_URL || `${proto}://${host}`;
 
   if (!orderId) {
     return NextResponse.redirect(`${appUrl}/menu?payment=failed`);
